@@ -22,7 +22,7 @@ _3 TILs and counting..._
 - [k8s](#k8s)
 
 ### [JungIn Kim](#jungin kim)
-- [a](JungIn Kim/a.md)
+- [a](jungin-kim/a.md)
 
 ### [html](#html)
 - [How to make a div](html/how-to-make-a-div.md)
