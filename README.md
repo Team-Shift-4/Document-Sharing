@@ -17,12 +17,12 @@ _3 TILs and counting..._
 
 ### Categories
 
-- [css](#css)
+- [JungIn Kim](#jungin kim)
 - [html](#html)
 - [k8s](#k8s)
 
-### [css](#css)
-- [How to add a CSS border](css/how-to-add-a-border.md)
+### [JungIn Kim](#jungin kim)
+- [a](JungIn Kim/a.md)
 
 ### [html](#html)
 - [How to make a div](html/how-to-make-a-div.md)
