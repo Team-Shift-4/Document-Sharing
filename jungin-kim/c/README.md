@@ -1,11 +1,11 @@
-## Jungin-Kim/Oracle
+## Jungin-Kim/C
 
-| Title                                | Description                                            |
-| ------------------------------------ | ------------------------------------------------------ |
-| [Markdown](./markdown/markdown.md)   | 마크다운 활용에 관한 내용                              |
-| [Oracle](./oracle/README.md)         | Oracle이 주된 내용인 문서들의 리스트(Golden Gate 포함) |
-| [MySQL](./mysql/README.md)           | MySQL이 주된 내용인 문서들의 리스트                    |
-| [PostgreSQL](./postgresql/README.md) | PostgreSQL이 주된 내용인 문서들의 리스트               |
-| [C](./c/README.md)                   | C언어와 관련있는 문서들의 리스트                       |
-| [ETC](./etc/README.md)               | 위 항목과 관련이 적은 나머지 문서들의 리스트           |
+| Title                                                 | Description                              |
+| ----------------------------------------------------- | ---------------------------------------- |
+| [CMake](./CMake.md)                                   | CMake에 관한 문서                        |
+| [CMake로 Library 만들기](./CMake로 Library 만들기.md) | CMake를 활용해 Library를 만들어보는 문서 |
+| [Makefile](./Makefile.md)                             | Makefile에 관한 문서                     |
+| [Process](./Process.md)                               | Unix Standard C Process에 관한 문서      |
+| [Signal](./Signal.md)                                 | Unix Standard C Signal에 관한 문서       |
+| [다시 공부하는 C](./다시 공부하는 C.md)               | 주기적으로 공부한 내용을 작성하는 문서   |
 

@@ -4,33 +4,6 @@
 
 **Oracle Server = Oracle Instance + Oracle Database**
 
-<aside>
-🎞️ oopy:slide
-
-```yaml
-type: "" #애니메이션 효과
-speed: 1000 # 슬라이드가 넘어가는 시간(ms)
-ratio: 2 # 슬라이드 너비 : 슬라이드 높이 비율을 지정합니다.
-full: false # 화면 꽉 차게 하기 ratio는 유지, 컬럼이나 토글안 일 시 옵션 동작 X
-autoplay: 
-  period: 0 # 슬라이드 자동 넘어가는 시간(0: 자동 재생 X)
-indicator: # 슬라이드 위치 점
-  show: true
-	color: "#448161" # 위치 점 색
-borderRadius: 0 # radius
-backgroundColor: "transparent" # 슬라이드 배경화면 색상 배경 투명 ->"transparent"
-```
-
-![Oracle Architecturepng.png](./Oracle Architecture/Oracle_Architecturepng.png)
-
-![OracleInstance.png](./Oracle Architecture/OracleInstance.png)
-
-![SGA.png](./Oracle Architecture/SGA.png)
-
-![PGA.png](./Oracle Architecture/PGA.png)
-
-</aside>
-
 # Oracle Queuing Algorithm
 
 - 기본적으로 Oracle은 Memory에서 LRU(Least Recently Used) List를 사용
@@ -237,7 +210,7 @@ SYSTEM TABLESPACE는 이 BLOCK SIZE를 이용
     - `LOG_CHECKPOINT_TIMEOUT`: CKPT가 발생할 시간 간격 설정(단위: Sec)
     - `LOC_CHECKPOINT_INTERVAL`: CKPT가 발생할 Redo Log File의 블록 수 지정
 - 발생 시점
-    - [log switch change](https://www.notion.so/27ab3dac8d844e05908f3d84b122e079)
+    - log switch change
     - `LOG_CHECKPOINT_TIMEOUT`
         - 마지막 Redo Log 작성(tail of the log)으로 부터 설정한 시간(초 단위)
         - 해당 초 이후 Checkpoint 발생
