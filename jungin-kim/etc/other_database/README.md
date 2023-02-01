@@ -8,7 +8,7 @@
 
 ### Range
 
-![](https://img.shields.io/badge/C-273849?style=for-the-badge&logo=c&logoColor=white)![](https://img.shields.io/badge/javascript-273849?style=for-the-badge&logo=javascript&logoColor=white)![](https://img.shields.io/badge/Vue.js-273849?style=for-the-badge&logo=vue.js&logoColor=white)![](https://img.shields.io/badge/Reverse_Engineering-273849?style=for-the-badge&logo=hexo&logoColor=white)![](https://img.shields.io/badge/Oracle-273849?style=for-the-badge&logo=oracle&logoColor=white)![](https://img.shields.io/badge/mysql-273849?style=for-the-badge&logo=mysql&logoColor=white)![](https://img.shields.io/badge/postgresql-273849?style=for-the-badge&logo=postgresql&logoColor=white)![](https://img.shields.io/badge/linux-273849?style=for-the-badge&logo=linux&logoColor=white)![](https://img.shields.io/badge/virtual box-273849?style=for-the-badge&logo=virtualbox&logoColor=white)
+![](https://img.shields.io/badge/C-273849?style=for-the-badge&logo=c&logoColor=white)![](https://img.shields.io/badge/javascript-273849?style=for-the-badge&logo=javascript&logoColor=white)![](https://img.shields.io/badge/Vue.js-273849?style=for-the-badge&logo=vue.js&logoColor=white)![](https://img.shields.io/badge/Reverse_Engineering-273849?style=for-the-badge&logo=hexo&logoColor=white)![](https://img.shields.io/badge/Oracle-273849?style=for-the-badge&logo=oracle&logoColor=white)![](https://img.shields.io/badge/mysql-273849?style=for-the-badge&logo=mysql&logoColor=white)![](https://img.shields.io/badge/postgresql-273849?style=for-the-badge&logo=postgresql&logoColor=white)
 
 #### Most used languages in Github
 
@@ -18,7 +18,7 @@
 
 | Title                                | Description                                            |
 | ------------------------------------ | ------------------------------------------------------ |
-| [Markdown](./markdown/markdown.md)   | 마크다운 활용에 관한 내용(차후 정리 예정)              |
+| [Markdown](./markdown/markdown.md)   | 마크다운 활용에 관한 내용                              |
 | [Oracle](./oracle/README.md)         | Oracle이 주된 내용인 문서들의 리스트(Golden Gate 포함) |
 | [MySQL](./mysql/README.md)           | MySQL이 주된 내용인 문서들의 리스트                    |
 | [PostgreSQL](./postgresql/README.md) | PostgreSQL이 주된 내용인 문서들의 리스트               |
