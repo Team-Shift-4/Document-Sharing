@@ -1,11 +1,11 @@
-## Jungin-Kim/Oracle
+## Jungin-Kim/PostgreSQL
 
-| Title                                | Description                                            |
-| ------------------------------------ | ------------------------------------------------------ |
-| [Markdown](./markdown/markdown.md)   | 마크다운 활용에 관한 내용                              |
-| [Oracle](./oracle/README.md)         | Oracle이 주된 내용인 문서들의 리스트(Golden Gate 포함) |
-| [MySQL](./mysql/README.md)           | MySQL이 주된 내용인 문서들의 리스트                    |
-| [PostgreSQL](./postgresql/README.md) | PostgreSQL이 주된 내용인 문서들의 리스트               |
-| [C](./c/README.md)                   | C언어와 관련있는 문서들의 리스트                       |
-| [ETC](./etc/README.md)               | 위 항목과 관련이 적은 나머지 문서들의 리스트           |
+| Title                                                   | Description                                          |
+| ------------------------------------------------------- | ---------------------------------------------------- |
+| [PostgreSQL Guide](./guide/README.md)                   | PostgreSQL의 기본 가이드 리스트                      |
+| [PostgreSQL 정리](./PostgreSQL 정리.md)                 | 개인적 요약본                                        |
+| [PostgreSQL Extract Guide](./PostgreSQL 추출 가이드.md) | PostgreSQL 추출 시 필요한 정보에 관한 대략적인 문서  |
+| [Vacuum](./PostgreSQL Vacuum.md)                        | Vacuum Process에 관한 간단한 문서                    |
+| [PostgreSQL WAL](./PostgreSQL WAL.md)                   | Write Ahead Log(XLOG)에 대한 간단한 문서             |
+| [WAL의 구조 및 구성 요소](./WAL의 구조 및 구성 요소.md) | Write Ahead Log(XLOG)의 구조와 구성 요소에 관한 문서 |
 
