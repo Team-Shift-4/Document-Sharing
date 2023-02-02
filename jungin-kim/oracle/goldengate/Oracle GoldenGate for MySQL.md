@@ -1,14 +1,10 @@
 # MySQL용 Oracle GoldenGate
 
-<aside>
+
 📌 Oracle GoldenGate 21.3c 기준으로 작성된 문서
 
-</aside>
 
-<aside>
-📖 **MySQL용 Oracle GoldenGate** **목차**
-
-</aside>
+📖 **MySQL용 Oracle GoldenGate** 
 
 # MySQL용 Oracle GoldenGate
 
