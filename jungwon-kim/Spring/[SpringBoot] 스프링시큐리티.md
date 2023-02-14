@@ -17,8 +17,80 @@ implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELE
 
 
 
-공식문서를 보면 Spring Security Servlet과 webflux 두가지가 있다.
-https://velog.io/@neity16/WebFlux-2-WebFlux-%EB%9E%80-SpringMVC-vs-WebFlux
+- SpringBoot 2.7+ 버전에서 Spring Security의 WebSecurityConfigurerAdapter를 통해 security config를 override 할 때 오류가 발생함
+
+``` java
+@Configuration
+@RequiredArgsConstructor
+@EnableWebSecurity // Spring Security 설정 활성화
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/", "/css/**", "/images/**",
+                        "/js/**", "/h2-console/**").permitAll()
+                .antMatchers("/api/v1/**").hasRole(Role.
+                        USER.name())
+                .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
+    }
+
+}
+```
+
+아래와 같이 변경 [참고 블로그](https://honeywater97.tistory.com/264)
+
+``` java
+@EnableWebSecurity
+@RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnDefaultWebSecurity
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    @Bean
+    @Order(SecurityProperties.BASIC_AUTH_ORDER)
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/", "/css/**", "/images/**",
+                        "/js/**", "/h2-console/**").permitAll()
+                .antMatchers("/api/v1/**").hasRole(Role.
+                        USER.name())
+                .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
+
+        return http.build();
+    }
+}
+```
+
+
 
 
 
@@ -87,3 +159,31 @@ public class SecurityConfig {
 - `and()` - http 객체의 설정을 이어서 할 수 있게 하는 메서드이다.
 - `csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))` - `/h2-console/`로 시작하는 URL은 CSRF 검증을 하지 않는다는 설정이다.
 - 위 처럼 URL 요청시 `X-Frame-Options` 헤더값을 `sameorigin`으로 설정하여 오류가 발생하지 않도록 했다. `X-Frame-Options` 헤더의 값으로 sameorigin을 설정하면 frame에 포함된 페이지가 페이지를 제공하는 사이트와 동일한 경우에는 계속 사용할 수 있다.
+
+
+
+
+
+내가 사용중인 것
+
+``` java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .httpBasic()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/user/**").permitAll()
+                .and()
+                .csrf().disable()
+        ;
+
+        return http.build();
+    }
+}
+```
+
