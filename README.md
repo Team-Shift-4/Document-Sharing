@@ -21,18 +21,18 @@ Markdown 문법으로 작성해 공유하는 것이 목적
 
 | Name                                       | Tier      | Rate    |
 | :----------------------------------------- | :-------: | :-----: |
-| [Jungin Kim](./jungin-kim/README.md)       | ♔King     | - (#1)  |
-| [Yein Yoon](./yein-yoon/README.md)         | ♔King     | -       |
-| [Seokbeom Jang](./seokbeom-jang/README.md) | ♔King     | -       |
-| [Jungwon Kim](./jungwon-kim/README.md)     | ♗Bishop   | #1 (#2) |
-| [Sejin Lee](./sejin-lee/README.md)         | ♘Knight   | -       |
-| [Jiseok Lee](./jiseok-lee/README.md)       | ♘Knight   | -       |
-| [Jeong Heo](./jeong-heo/README.md)         | ♘Knight   | -       |
-| [bongsik-kwon](./bongsik-kwon/README.md)   | ♙Pawn     | -       |
-| [Hyuktae Kwon](./hyuktae-kwon/README.md)   | ♙Pawn     | -       |
-| [Junseok Park](./junseok-park/README.md)   | ♙Pawn     | -       |
-| [Yura Park](./yura-park/README.md)         | @everyone | -       |
-| [Jinho Kim](./jinho-kim/README.md)         | @everyone | -       |
+| [Jungin Kim](./jungin-kim/README.md)       | `♔King`     | - (#1)  |
+| [Yein Yoon](./yein-yoon/README.md)         | `♔King`     | -       |
+| [Seokbeom Jang](./seokbeom-jang/README.md) | `♔King`     | -       |
+| [Jungwon Kim](./jungwon-kim/README.md)     | `♗Bishop`   | #1 (#2) |
+| [Sejin Lee](./sejin-lee/README.md)         | `♘Knight`   | -       |
+| [Jiseok Lee](./jiseok-lee/README.md)       | `♘Knight`   | -       |
+| [Jeong Heo](./jeong-heo/README.md)         | `♘Knight`   | -       |
+| [bongsik-kwon](./bongsik-kwon/README.md)   | `♙Pawn`     | -       |
+| [Hyuktae Kwon](./hyuktae-kwon/README.md)   | `♙Pawn`     | -       |
+| [Junseok Park](./junseok-park/README.md)   | `♙Pawn`     | -       |
+| [Yura Park](./yura-park/README.md)         | `@everyone` | -       |
+| [Jinho Kim](./jinho-kim/README.md)         | `@everyone` | -       |
 
 <details>
     <summary>
