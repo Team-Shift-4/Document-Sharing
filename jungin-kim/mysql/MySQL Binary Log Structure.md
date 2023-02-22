@@ -112,6 +112,51 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 
 ### QUERY_EVENT
 
+`QUERY_EVENT`는 13 Byte의 Post-Header와 가변 길이의 Body로 이루어져 있습니다.
+
+<table><thead><tr><th colspan="16">OPCODE: QUERY</th></tr></thead><tbody><tr><td>6f</td><td>70</td><td>e4</td><td>63</td><td>02</td><td>01</td><td>00</td><td>00</td><td>00</td><td>b8</td><td>00</td><td>00</td><td>00</td><td>a4</td><td>01</td><td>00</td></tr><tr><td colspan="16">1</td></tr><tr><td>00</td><td>00</td><td>00</td><td>24</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td><td>00</td><td>00</td><td>2e</td><td>00</td></tr><tr><td colspan="3">1</td><td colspan="4">2</td><td colspan="4">3</td><td>4</td><td colspan="2">5</td><td colspan="2">6</td></tr><tr><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td><td>20</td><td>00</td><td>a0</td><td>45</td><td>00</td><td>00</td><td>00</td><td>00</td><td>06</td><td>03</td></tr><tr><td colspan="16">7</td></tr><tr><td>73</td><td>74</td><td>64</td><td>04</td><td>ff</td><td>00</td><td>ff</td><td>00</td><td>ff</td><td>00</td><td>0c</td><td>01</td><td>61</td><td>00</td><td>10</td><td>01</td></tr><tr><td colspan="16">7</td></tr><tr><td>11</td><td>ce</td><td>07</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>12</td><td>ff</td><td>00</td><td>13</td><td>00</td><td>61</td><td>00</td></tr><tr><td colspan="14">7</td><td colspan="2">8</td></tr><tr><td>2f</td><td>2a</td><td>20</td><td>41</td><td>70</td><td>70</td><td>6c</td><td>69</td><td>63</td><td>61</td><td>74</td><td>69</td><td>6f</td><td>6e</td><td>4e</td><td>61</td></tr><tr><td colspan="16">9</td></tr><tr><td>6d</td><td>65</td><td>3d</td><td>44</td><td>61</td><td>74</td><td>61</td><td>47</td><td>72</td><td>69</td><td>70</td><td>20</td><td>32</td><td>30</td><td>32</td><td>31</td></tr><tr><td colspan="16">9</td></tr><tr><td>2e</td><td>31</td><td>2e</td><td>33</td><td>20</td><td>2a</td><td>2f</td><td>20</td><td>63</td><td>72</td><td>65</td><td>61</td><td>74</td><td>65</td><td>20</td><td>74</td></tr><tr><td colspan="16">9</td></tr><tr><td>61</td><td>62</td><td>6c</td><td>65</td><td>20</td><td>74</td><td>65</td><td>73</td><td>74</td><td>5f</td><td>61</td><td>67</td><td>61</td><td>69</td><td>6e</td><td>28</td></tr><tr><td colspan="16">9</td></tr><tr><td>63</td><td>31</td><td>20</td><td>69</td><td>6e</td><td>74</td><td>20</td><td>70</td><td>72</td><td>69</td><td>6d</td><td>61</td><td>72</td><td>79</td><td>20</td><td>6b</td></tr><tr><td colspan="16">9</td></tr><tr><td>65</td><td>79</td><td>2c</td><td>20</td><td>63</td><td>32</td><td>20</td><td>74</td><td>69</td><td>6d</td><td>65</td><td>73</td><td>74</td><td>61</td><td>6d</td><td>70</td></tr><tr><td colspan="16">9</td></tr><tr><td>28</td><td>36</td><td>29</td><td>29</td><td>9b</td><td>17</td><td>ee</td><td>f8</td><td colspan="8" rowspan="2"></td></tr><tr><td colspan="4">9</td><td colspan="4">10</td></tr></tbody></table>
+
+| Num  | Name              | Length    | Description                |
+| ---- | ----------------- | --------- | -------------------------- |
+| 1    | Common-Header     | 19 Byte   |                            |
+| 2    | `thread_id`       | 4 Byte    |                            |
+| 3    | `query_exec_time` | 4 Byte    |                            |
+| 4    | `db_len`          | 1 Byte    |                            |
+| 5    | `error_code`      | 4 Byte    |                            |
+| 6    | `status_vars_len` | 2 Byte    |                            |
+| 7    | `status_vars`     | 가변 길이 | `status_vars_len`          |
+| 8    | `m_db`            | 가변 길이 | `db_len`                   |
+| 9    | `m_query`         | 가변 길이 | 남은 Event Length에서 계산 |
+| 10   | Footer            | 4 Byte    |                            |
+
+#### `status_vars`의 구분자와 형태
+
+| Identifier | Name                                | Format    | Description                                                  |
+| ---------- | ----------------------------------- | --------- | ------------------------------------------------------------ |
+| 0x00(0)    | `Q_FLAGS2_CODE`                     | 5 Byte    | ID + 4 Byte `flag2`                                          |
+| 0x01(1)    | `Q_SQL_MODE_CODE`                   | 9 Byte    | ID + 8 Byte `sql_mode`                                       |
+| 0x02(2)    | `Q_CATALOG_CODE`                    | -         | 사용하지 않음 binlog ver 1~3                                 |
+| 0x03(3)    | `Q_AUTO_INCREMENT`                  | 5 Byte    | ID + 2 Byte `increment` + 2 Byte  `offset`                   |
+| 0x04(4)    | `Q_CHARSET_CODE`                    | 7 Byte    | ID + 2 Byte `client` + 2 Byte `connection` + 2 Byte `server` |
+| 0x05(5)    | `Q_TIME_ZONE_CODE`                  | 가변 길이 | ID + 1 Byte `LEN` + `LEN` * `uint8_t`                        |
+| 0x06(6)    | `Q_CATALOG_NZ_CODE`                 | 가변 길이 | ID + 1 Byte `LEN` + `LEN` * `uint8_t`                        |
+| 0x07(7)    | `Q_LC_TIME_NAMES_CODE`              | 3 Byte    | ID + 2 Byte `?`                                              |
+| 0x08(8)    | `Q_CHARSET_DATABASE_CODE`           | 3 Byte    | ID + 2 Byte `?`                                              |
+| 0x09(9)    | `Q_TABLE_MAP_FOR_UPDATE_CODE`       | 9 Byte    | ID + 8 Byte `?`                                              |
+| 0x0A(10)   | `Q_MASTER_DATA_WRITTEN_CODE`        | 5 Byte    | ID + 4 Byte `?`, 사용하지 않음(placeholder)                  |
+| 0x0B(11)   | `Q_INVOKER`                         | 가변 길이 | ID + 2 Byte `LEN` + `LEN` * `uint8_t`                        |
+| 0x0C(12)   | `Q_UPDATED_DB_NAMES`                | 가변 길이 | ID + `2-D array` `?`                                         |
+| 0x0D(13)   | `Q_MICROSECONDS`                    | -         | 사용하지 않음                                                |
+| 0x0E(14)   | `Q_COMMIT_TS`                       | -         | 사용하지 않음                                                |
+| 0x0F(15)   | `Q_COMMIT_TS2`                      | -         | `GTID_EVENT`를 Migration 한 후 사용하지 않음                 |
+| 0x10(16)   | `Q_EXPLICIT_DEFAULTS_FOR_TIMESTAMP` | 2 Byte    | ID + 1 Byte `boolean`                                        |
+| 0x11(17)   | `Q_DDL_LOGGED_WITH_XID`             | 9 Byte    | ID + 8 Byte `xid`                                            |
+| 0x12(18)   | `Q_DEFAULT_COLLATION_FOR_UTF8MB4`   | 3 Byte    | ID + 2 Byte `default_collation_charset`                      |
+| 0x13(19)   | `Q_SQL_REQUIRE_PRIMARY_KEY`         | 3 Byte    | ID + 2 Byte `sql_require_primary_key`                        |
+| 0x14(20)   | `Q_DEFAULT_TABLE_ENCRYPTION`        | 3 Byte    | ID + 2 Byte `default_table_encryption`                       |
+
+
+
 ### STOP_EVENT
 
 `STOP_EVENT`는 Common-Header밖에 존재하지 않습니다.
@@ -131,15 +176,49 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 
 ### INTVAR_EVENT
 
+`QUERY_EVENT` 이전에 생기는 Event이며 Query에서 `LAST_INSERT_ID`나 `INSERT_ID`를 사용할 때 발생합니다.(테스트 예정)
+`INTVAR_EVENT`는 Post-Header없이 9 Byte의 Body만 존재합니다.
+
+| Num  | Name   | Length | Description                                                  |
+| ---- | ------ | ------ | ------------------------------------------------------------ |
+| -    | `type` | 1 Byte | `enum` 값, `LAST_INSERT_ID_EVENT` = 1, `INSERT_ID_EVENT` = 2 |
+| -    | `val`  | 8 Byte | `uint64_t` 값                                                |
+
+
+
 ### SLAVE_EVENT
 
 ### APPEND_BLOCK_EVENT
 
+`APPEND_BLOCK_EVENT`는 4 Byte의 Post-Header와 raw data인 Body로 이루어져 있습니다.
+
+| Num  | Name      | Length | Description |
+| ---- | --------- | ------ | ----------- |
+| -    | `file_id` | 4 Byte |             |
+
 ### DELETE_FILE_EVENT
+
+`DELETE_FILE_EVENT`는 Master Server에서 `LOAD DATA`가 실패할 경우 발생합니다.
+`DELETE_FILE_EVENT`는  Body 없이 4 Byte의 Post-Header로 이루어져 있습니다.
+
+| Num  | Name      | Length | Description |
+| ---- | --------- | ------ | ----------- |
+| -    | `file_id` | 4 Byte |             |
 
 ### RAND_EVENT
 
+Binlog ver 4.1.0 이하에서 `RAND()`나 `PASSWORD()`를 사용할 때 랜덤 시드를 방생하는 Event입니다.
+Binlog ver 4.1.1 이후 사용하지 않습니다.
+`RAND_EVENT`는 Post-Header없이 16 Byte의 Body만 존재합니다.
+
+| Num  | Name    | Length | Description |
+| ---- | ------- | ------ | ----------- |
+| -    | `seed1` | 8 Byte | First Seed  |
+| -    | `seed2` | 8 Byte | Second Seed |
+
 ### USER_VAR_EVENT
+
+`QUERY_EVENT` 이전에 생기는 Event이나 `row-base` Logging에서는 사용되지 않습니다.
 
 ### FORMAT_DESCRIPTION_EVENT
 
@@ -152,7 +231,7 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 | 1    | Common-Header           | 19 Byte |             |
 | 2    | `binlog_version`        | 2 Byte  |             |
 | 3    | `server_version`        | 50 Byte |             |
-| 4    | `created`               | 4 Byte  |             |
+| 4    | `created_timestamp`     | 4 Byte  |             |
 | 5    | `common_header_len`     | 1 Byte  |             |
 | 6    | `post_header_len`       | 41 Byte |             |
 | 7    | `number_of_event_types` | 1 Byte  |             |
@@ -168,13 +247,26 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 | ---- | ------------- | ------- | ----------- |
 | 1    | Common-Header | 19 Byte |             |
 | 2    | `xid`         | 8 Byte  |             |
-| 3    | Footer        | 8 Byte  |             |
-
-
+| 3    | Footer        | 4 Byte  |             |
 
 ### BEGIN_LOAD_QUERY_EVENT
 
+`BEGIN_LOAD_QUERY_EVENT`는 Common-Header로만 이루어져 있습니다.
+
 ### EXECUTE_LOAD_QUERY_EVENT
+
+`EXECUTE_LOAD_QUERY_EVENT`는 `QUERY_EVENT`와 동일한 13 Byte의 Post-Header와 가변 길이의 Body로 이루어져 있습니다.
+
+| Num  | Name              | Length | Description                                                  |
+| ---- | ----------------- | ------ | ------------------------------------------------------------ |
+| -    | `thread_id`       | 4 Byte |                                                              |
+| -    | `query_exec_time` | 4 Byte |                                                              |
+| -    | `db_len`          | 1 Byte |                                                              |
+| -    | `error_code`      | 4 Byte |                                                              |
+| -    | `file_id`         | 4 Byte |                                                              |
+| -    | `fn_post_start`   | 4 Byte |                                                              |
+| -    | `fn_pos_end`      | 4 Byte |                                                              |
+| -    | `dump_handling`   | 1 Byte | `LOAD_DUP_ERROR` = 0, `LOAD_DUP_IGNORE` = 1, `LOAD_DUP_REPLACE` = 2 |
 
 ### TABLE_MAP_EVENT
 
@@ -198,7 +290,7 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 
 #### [`column_type`에 해당하는 Metadata와 길이](#data-type)
 
-#### `optional_metadata_fields`에 관한 구분자와 형태
+#### `optional_metadata_fields`의 구분자와 형태
 
 | Identifier | Name                          | Format                                 | Description                                                  |
 | ---------- | ----------------------------- | -------------------------------------- | ------------------------------------------------------------ |
@@ -233,11 +325,24 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 
 ### HEARTBEAT_LOG_EVENT
 
+Replication 중 Source Server가 살아있는 지 확인하기 위한 Event입니다.
+`HEARTBEAT_LOG_EVENT`는 Post-Header없이 가변 길이의 Body로 이루어져 있습니다.
+
+| Num  | Name        | Length | Description |
+| ---- | ----------- | ------ | ----------- |
+| -    | `log_ident` | ?      |             |
+
 ### IGNORABLE_LOG_EVENT
 
 `IGNORABLE_LOG_EVENT`는 Common-Header밖에 존재하지 않습니다.
 
 ### ROWS_QUERY_LOG_EVENT
+
+`ROWS_QUERY_LOG_EVENT`는 Post-Header 없이 가변 길이의 Body로 이루어져 있습니다.
+
+| Num  | Name           | Length | Description |
+| ---- | -------------- | ------ | ----------- |
+| -    | `m_rows_query` | ?      |             |
 
 ### WRITE_ROWS_EVENT
 
@@ -300,19 +405,61 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 
 ### ANONYMOUS_GTID_LOG_EVENT
 
+`ANONYMOUS_GTID_LOG_EVENT`는 42 Byte의 Post-Header와 Body로 이루어져 있습니다.
+
 ### PREVIOUS_GTIDS_LOG_EVENT
+
+`PREVIOUS_GTIDS_LOG_EVENT`는 Post-Header 없이 Body로만 이루어져 있습니다.
+
+<table><thead><tr><th colspan="16">OPCODE: PREVIOUS GTIDS LOG</th></tr></thead><tbody><tr><td>a5</td><td>8a</td><td>ec</td><td>63</td><td>23</td><td>01</td><td>00</td><td>00</td><td>00</td><td>1f</td><td>00</td><td>00</td><td>00</td><td>9d</td><td>00</td><td>00</td></tr><tr><td colspan="16">1</td></tr><tr><td>00</td><td>80</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>5e</td><td>19</td><td>8f</td><td>db</td><td rowspan="2"></td></tr><tr><td colspan="3">1</td><td colspan="4">2</td><td colspan="4">3</td><td colspan="4">4</td></tr></tbody></table>
+
+| Num  | Name          | Length    | Description |
+| ---- | ------------- | --------- | ----------- |
+| 1    | Common-Header | 19 Byte   |             |
+| 2    | `buf`         | 가변 길이 | ??          |
+| 3    | `buf-size`    | 4 Byte    | ??          |
+| 4    | Footer        | 4 Byte    |             |
 
 ### TRANSACTION_CONTEXT_EVENT
 
+`TRANSACTION_CONTEXT_EVENT`는 알 수 있는 정보가 적어 상세히 나타낼 수 없었습니다.
+
+| Num  | Name                              | Length    | Description |
+| ---- | --------------------------------- | --------- | ----------- |
+| -    | `thread_id`                       | 4 Byte    |             |
+| -    | `gtid_specified`                  | ?         |             |
+| -    | `encoded_snapshot_version`        | 가변 길이 |             |
+| -    | `encoded_snapshot_version_length` | 4 Byte    |             |
+| -    | `write_set`                       | ?         |             |
+| -    | `read_set`                        | ?         |             |
+
 ### VIEW_CHANGE_EVENT
 
+`VIEW_CHANGE_EVENT`는 알 수 있는 정보가 적어 상세히 나타낼 수 없었습니다.
+
+| Num  | Name                 | Length  | Description |
+| ---- | -------------------- | ------- | ----------- |
+| -    | `view_id`            | 40 Byte |             |
+| -    | `seq_number`         | 8 Byte  |             |
+| -    | `certification_info` | ?       |             |
+
 ### XA_PREPARE_LOG_EVENT
+
+`XA_PREPARE_LOG_EVENT`는 Post-Header 없이 Body로만 이루어져 있습니다.(테스트 예정)
 
 ### PARTIAL_UPDATE_ROWS_EVENT
 
 ### TRANSACTION_PAYLOAD_EVENT
 
 ### HEARTBEAT_LOG_EVENT_V2
+
+Server Ver 8.0.26 이상의 Source Server에서만 표기됩니다.
+`HEARTBEAT_LOG_EVENT_V2`는 Post-Header없이 가변 길이의 Body로 이루어져 있습니다.
+
+| Num  | Name             | Length | Description |
+| ---- | ---------------- | ------ | ----------- |
+| -    | `m_log_filename` | ?      |             |
+| -    | `m_log_pos`      | 8 Byte |             |
 
 ## Data Type
 
@@ -353,4 +500,10 @@ Unsigend Integer를 효율적으로 나타내기 위한 특별한 형식입니�
 | 0xFE(254)  | `STRING`      | 2 Byte      |             |
 | 0xFF(255)  | `GEOMETRY`    | 1 Byte      |             |
 
-ㅁ
+# Checklist
+
+- [ ] 다양한 형태의 Data Type 체크하기
+- [ ] 알지 못하는 Meta 값 파악하기
+- [ ] 시인성 좋은 SQL문 형태로 출력하기
+- [ ] 다른 상황에서 추출할 수 있는 Binlog Event 확인하기
+- [ ] 명확한 구조가 나오지 않은 Event 확인하기

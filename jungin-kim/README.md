@@ -28,6 +28,12 @@
 ## To-do Check List
 
 - [ ] MySQL 문서 정리
+  - [x] Statement Events
+  - [x] Binlog Events
+  - [x] Byteorder
+  - [x] Control Events
+  - [x] Load Data
+  - [x] Rows Event
 - [ ] Key 정리
 - [ ] Ark for CDC 코드 확인
 - [ ] qlibc 학습
