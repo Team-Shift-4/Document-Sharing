@@ -25,4 +25,16 @@
 | [C](./c/README.md)                   | C언어와 관련있는 문서들의 리스트                       |
 | [ETC](./etc/README.md)               | 위 항목과 관련이 적은 나머지 문서들의 리스트           |
 
-아야어여
+## To-do Check List
+
+- [ ] MySQL 문서 정리
+  - [x] Statement Events
+  - [x] Binlog Events
+  - [x] Byteorder
+  - [x] Control Events
+  - [x] Load Data
+  - [x] Rows Event
+- [ ] Key 정리
+- [ ] Ark for CDC 코드 확인
+- [ ] qlibc 학습
+- [ ] 코드 리팩터링
