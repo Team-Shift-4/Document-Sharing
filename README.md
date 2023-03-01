@@ -22,7 +22,7 @@ Markdown 문법으로 작성해 공유하는 것이 목적
 | Name                                       | Tier      | Rate    |
 | :----------------------------------------- | :-------: | :-----: |
 | [Jungin Kim](./jungin-kim/README.md)       | `♔King`     | - (#1)  |
-| [Yein Yoon](./yein-yoon/README.md)         | `♔King`     | -       |
+| [Yein Yoon](./yein-yoon/README.md)         | `♔King`     | #2 (#3) |
 | [Seokbeom Jang](./seokbeom-jang/README.md) | `♔King`     | -       |
 | [Jungwon Kim](./jungwon-kim/README.md)     | `♗Bishop`   | #1 (#2) |
 | [Sejin Lee](./sejin-lee/README.md)         | `♘Knight`   | -       |
@@ -34,48 +34,7 @@ Markdown 문법으로 작성해 공유하는 것이 목적
 | [Yura Park](./yura-park/README.md)         | `@everyone` | -       |
 | [Jinho Kim](./jinho-kim/README.md)         | `@everyone` | -       |
 
-<details>
-    <summary>
-        2월 중간 평가(Only Document Sharing)
-    </summary>
-    <div>
-        <ol class="contrib-data list-style-none"><li class="contrib-person float-left col-6 my-2 pr-2">
-        <span class="d-block Box">
-            <a data-hovercard-type="user" data-hovercard-url="/users/99JungInKim/hovercard" href="/99JungInKim" class="d-inline-block mr-2 float-left">
-              <img src="https://avatars.githubusercontent.com/u/84563067?s=60&amp;v=4" class="avatar avatar-user" alt="99JungInKim" width="38" height="38">
-            </a>
-            <span class="f5 text-normal color-fg-muted float-right">#1</span>
-            <a data-hovercard-type="user" data-hovercard-url="/users/99JungInKim/hovercard" class="text-normal" href="/99JungInKim">99JungInKim</a>
-            <span class="f6 d-block color-fg-muted">
-              <span class="cmeta">
-                <div>
-                  <a href="https://github.com/Team-Shift-4/Document-Sharing/commits?author=99JungInKim" class="Link--secondary text-normal">34 commits</a>
-                  &nbsp;&nbsp;
-                  <span class="color-fg-success text-normal">34,406 ++</span>
-                  &nbsp;&nbsp;
-                  <span class="color-fg-danger text-normal">8,399 --</span>
-                </div>
-              </span>
-            </span></span>
-      </li><li class="contrib-person float-left col-6 my-2 pl-2">
-        <span class="d-block Box">
-            <a data-hovercard-type="user" data-hovercard-url="/users/kimwonny8/hovercard" href="/kimwonny8" class="d-inline-block mr-2 float-left">
-              <img src="https://avatars.githubusercontent.com/u/86811808?s=60&amp;v=4" class="avatar avatar-user" alt="kimwonny8" width="38" height="38">
-            </a>
-            <span class="f5 text-normal color-fg-muted float-right">#2</span>
-            <a data-hovercard-type="user" data-hovercard-url="/users/kimwonny8/hovercard" class="text-normal" href="/kimwonny8">kimwonny8</a>
-            <span class="f6 d-block color-fg-muted">
-              <span class="cmeta">
-                <div>
-                  <a href="https://github.com/Team-Shift-4/Document-Sharing/commits?author=kimwonny8" class="Link--secondary text-normal">1 commit</a>
-                  &nbsp;&nbsp;
-                  <span class="color-fg-success text-normal">2,501 ++</span>
-                  &nbsp;&nbsp;
-                  <span class="color-fg-danger text-normal">0 --</span>
-                </div>
-              </span>
-            </span>
-        </span>
-      </li></ol>
-    </div>
-</details>
+![2302](./README.assets/2302.png)
+
+2월 당첨자는 **kimwonny8**입니다!
+3만원 강의와 1만원 현금 중 1만원을 선택하셔서 직접 송금해 드렸습니다!
