@@ -1,34 +1,22 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=header&text=MySQL Binlog Parser&fontSize=50&fontColor=ffffff"/>
 
-# MySQL Binlog Parser
+# MySQL Binlog Parser(`23.03.08)
 
 이 프로그램은 MySQL 8.0(Log Version 4)의 Binlog File을 읽어 원하는 데이터를 추출해 필요한 양식으로 만들기 위해 제작 중
 MySQL의 C API는 C++을 사용하고 추가적으로 Library를 정의한 후 Build해야만 사용할 수 있는 단점을 해결하기 위해 제작
-
-## 목차
-
-- [Current Version](#current-version230214)
-- [`23.02.13](#ver-230213)
-- [`23.02.10](#ver-230210)
-- [`23.02.08](#ver-230208)
-- [`23.02.07](#ver-230207)
-- [`23.01.25](#ver-230125)
-- [`23.01.20](#ver-230120)
-
-## Current Version(`23.02.14)
 
 ### 목차
 
 - [Input](#input)
 - [Output](#output)
-- [Memo](#memo)
+- [설명](#설명)
 
 ### Input
 
 실행 시 파라미터에 MySQL Binlog File의 이름을 입력하거나 실행 후 원하는 MySQL Binlog File의 이름을 입력
 
 -v 옵션을 통해 UNKNOWN 값 출력 가능
--h 옵션을 통해 Hex값 출력 가능
+-x 옵션을 통해 Hex값 출력 가능
 -d 옵션을 통해 기본 값이 아닌 디렉터리 사용 가능
 
 따로 DB 연결 없이 작동
@@ -36,1739 +24,493 @@ MySQL의 C API는 C++을 사용하고 추가적으로 Library를 정의한 후 B
 #### Example
 
 ```
-mysql_binlog_parser [-d <DIRECTORY PATH>] [-v] [-h] filename
+mysql_binlog_parser -v -x bin.000039
 ```
 
 ### Output
 
-파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 출력
-
-옵션에 따라 출력
+파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 옵션에 따라 출력
 
 #### Example
 
 ```
-/clion/project/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser -v -h bin.000018
-Verbose Hex 
-File name: bin.000018
-
-0001) TIMESTAMP: Tue 2023-02-14 09:07:18
-LEN: 99(122)
-EVENT TYPE: FORMAT DESCRIPTION EVENT
-SERVER ID: 1
-POS: 126(0x7E)
-FLAG(?): 0001
-CRC32: 18B6C741
-
+/clion/project/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser -v -x bin.000039
+Verbose Hex
+File name: bin.000039
+ 
+0001) 2023-03-08 17:55:03 End_log pos 126(0x7E) LEN: 122(7A) EVENT TYPE: FORMAT DESCRIPTION EVENT Server ID: 1 Flag: 0001 CRC32: E9822AC7
+ 
 HEX
-	04 00 38 2E 30 2E 33 32 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 B6 D0 EA 63 13 00 0D 00 08 00 00 00 
-	00 04 00 04 00 00 00 62 00 04 1A 08 00 00 00 08 
-	08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12 34 00 0A 
-	28 00 01 
-
-DATA
-	UNKNOWN: 04 00 
-	VERSION: 8.0.32
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	TIMESTAMP: Tue 2023-02-14 09:07:18
-	UNKNOWN: 13 00 0d 00 08 00 00 00 00 04 00 04 00 00 00 62 00 04 1a 08 00 00 00 08 08 08 02 00 00 00 0a 0a 0a 2a 2a 00 12 34 00 0a 28 00 01 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    67 4D 08 64 0F 01 00 00 00 7A 00 00 00 7E 00 00
+    00 01 00 04 00 38 2E 30 2E 33 32 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 13 00 0D 00 08
+    00 00 00 00 04 00 04 00 00 00 62 00 04 1A 08 00
+    00 00 08 08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12
+    34 00 0A 28 00 01
+ 
+VERBOSE
+    binlog version: 4, server version: 8.0.32, common header length: 19, date: 1970-01-01 09:00:00(0), number of event_types: 1
+    Post-Header length per event
+        QUERY EVENT: 13 ROTATE EVENT: 8 APPEND BLOCK EVENT: 4   DELETE FILE EVENT: 4    FORMAT DESCRIPTION EVENT: 98    BEGIN LOAD QUERY EVENT: 4   EXECUTE LOAD QUERY EVENT: 26
+        TABLE MAP EVENT: 8  WRITE ROWS EVENT V1: 8  UPDATE ROWS EVENT V1: 8 DELETE ROWS EVENT V1: 8 INCIDENT EVENT: 2   WRITE ROWS EVENT: 10    UPDATE ROWS EVENT: 10
+        DELETE ROWS EVENT: 10   GTID LOG EVENT: 42  ANONYMOUS GTID LOG EVENT: 42    TRANSACTION CONTEXT EVENT: 18   VIEW CHANGE EVENT: 52   PARTIAL UPDATE ROWS EVENT: 10   TRANSACTION PAYLOAD EVENT: 40
+ 
 +------------------------------------------------------+
-0002) TIMESTAMP: Tue 2023-02-14 09:07:18
-LEN: 8(31)
-EVENT TYPE: PREVIOUS GTIDS LOG EVENT
-SERVER ID: 1
-POS: 157(0x9D)
-FLAG(?): 0080
-CRC32: 735FA9E6
-
+0002) 2023-03-08 17:55:03 End_log pos 157(0x9D) LEN: 31(1F) EVENT TYPE: PREVIOUS GTIDS LOG EVENT Server ID: 1 Flag: 0080 CRC32: 185299BA
+ 
 HEX
-	00 00 00 00 00 00 00 00 
-
-DATA
-	XID : 0
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    67 4D 08 64 23 01 00 00 00 1F 00 00 00 9D 00 00
+    00 80 00 00 00 00 00 00 00 00 00
+ 
+VERBOSE
+    buffer size(?): 0, buffer(?): NULL
+ 
 +------------------------------------------------------+
-0003) TIMESTAMP: Tue 2023-02-14 12:54:23
-LEN: 54(77)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 234(0xEA)
-FLAG(?): 0000
-CRC32: 69A5B38D
-
+0003) 2023-03-08 17:55:20 End_log pos 234(0xEA) LEN: 77(4D) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: EABC03B1
+ 
 HEX
-	01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 
-	00 00 01 00 00 00 00 00 00 00 E5 9B 57 EB A0 F4 
-	05 B9 A0 38 01 00 
-
-DATA
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 0 AFTER 1
-	ORIGINAL COMMITTED TIMESTAMP: e5 9b 57 eb a0 f4 05 
-	TRANSACTION LENGTH: 185
-	SERVER VERSION: 80032
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    78 4D 08 64 22 01 00 00 00 4D 00 00 00 EA 00 00
+    00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00
+    00 00 00 00 00 01 00 00 00 00 00 00 00 E3 B4 15
+    B0 5F F6 05 BF A0 38 01 00
+ 
+VERBOSE
+    last committed: 0, sequence number: 1, original committed timestamp: 2954212579, immediate_commit_timestamp: 2954212579, transaction length: 191, original server version: 80032, immediate server version: 80032
+ 
 +------------------------------------------------------+
-0004) TIMESTAMP: Tue 2023-02-14 12:54:23
-LEN: 85(108)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 342(0x156)
-FLAG(?): 0008
-CRC32: 76EC81D5
-
+0004) 2023-03-08 17:55:20 End_log pos 348(0x15C) LEN: 114(72) EVENT TYPE: QUERY EVENT Server ID: 1 Flag: 0008 CRC32: 5CDDE2B5
+ 
 HEX
-	08 00 00 00 00 00 00 00 04 00 00 2F 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 0C 01 74 65 73 74 00 11 09 
-	00 00 00 00 00 00 00 12 FF 00 14 00 74 65 73 74 
-	00 63 72 65 61 74 65 20 64 61 74 61 62 61 73 65 
-	20 74 65 73 74 
-
-DATA
-	UNKNOWN: 08 00 00 00 00 00 00 00 04 00 00 2f 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 74 65 73 74 00 11 09 00 00 00 00 00 00 00 12 ff 00 14 00 74 65 73 74 00 63 72 65 61 74 65 20 64 61 74 61 62 61 73 65 20 74 65 73 74 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    78 4D 08 64 02 01 00 00 00 72 00 00 00 5C 01 00
+    00 08 00 0A 00 00 00 00 00 00 00 06 00 00 31 00
+    00 00 00 00 00 01 20 00 A0 45 00 00 00 00 06 03
+    73 74 64 04 FF 00 FF 00 FF 00 0C 01 70 61 72 73
+    65 72 00 11 32 00 00 00 00 00 00 00 12 FF 00 14
+    00 70 61 72 73 65 72 00 63 72 65 61 74 65 20 64
+    61 74 61 62 61 73 65 20 70 61 72 73 65 72
+ 
+VERBOSE
+    db name: parser, execute time: 0ms, error code: 0, thread id: 10
+    query: create database parser
+ 
 +------------------------------------------------------+
-0005) TIMESTAMP: Tue 2023-02-14 12:54:30
-LEN: 54(77)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 419(0x1A3)
-FLAG(?): 0000
-CRC32: 5DF0F366
-
+0005) 2023-03-08 17:56:59 End_log pos 427(0x1AB) LEN: 79(4F) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: 6B93A71
+ 
 HEX
-	01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 01 00 00 00 00 00 
-	00 00 02 00 00 00 00 00 00 00 B1 F5 B9 EB A0 F4 
-	05 C9 A0 38 01 00 
-
-DATA
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 1 AFTER 2
-	ORIGINAL COMMITTED TIMESTAMP: b1 f5 b9 eb a0 f4 05 
-	TRANSACTION LENGTH: 201
-	SERVER VERSION: 80032
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    DB 4D 08 64 22 01 00 00 00 4F 00 00 00 AB 01 00
+    00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 01 00 00
+    00 00 00 00 00 02 00 00 00 00 00 00 00 5C 82 00
+    B6 5F F6 05 FC 32 01 A0 38 01 00
+ 
+VERBOSE
+    last committed: 1, sequence number: 2, original committed timestamp: 3053486684, immediate_commit_timestamp: 3053486684, transaction length: 306, original server version: 80032, immediate server version: 80032
+ 
 +------------------------------------------------------+
-0006) TIMESTAMP: Tue 2023-02-14 12:54:30
-LEN: 101(124)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 543(0x21F)
-FLAG(?): 0000
-CRC32: 61F1486E
-
+0006) 2023-03-08 17:56:59 End_log pos 654(0x28E) LEN: 227(E3) EVENT TYPE: QUERY EVENT Server ID: 1 Flag: 0000 CRC32: DEA267AD
+ 
 HEX
-	08 00 00 00 00 00 00 00 04 00 00 2F 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 0C 01 74 65 73 74 00 11 0E 
-	00 00 00 00 00 00 00 12 FF 00 13 00 74 65 73 74 
-	00 63 72 65 61 74 65 20 74 61 62 6C 65 20 72 65 
-	76 65 72 73 65 28 63 31 20 69 6E 74 2C 20 63 32 
-	20 69 6E 74 29 
-
-DATA
-	UNKNOWN: 08 00 00 00 00 00 00 00 04 00 00 2f 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 74 65 73 74 00 11 0e 00 00 00 00 00 00 00 12 ff 00 13 00 74 65 73 74 00 63 72 65 61 74 65 20 74 61 62 6c 65 20 72 65 76 65 72 73 65 28 63 31 20 69 6e 74 2c 20 63 32 20 69 6e 74 29 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    DB 4D 08 64 02 01 00 00 00 E3 00 00 00 8E 02 00
+    00 00 00 0A 00 00 00 00 00 00 00 06 00 00 33 00
+    00 00 00 00 00 01 20 00 A0 45 00 00 00 00 06 03
+    73 74 64 04 FF 00 FF 00 FF 00 0C 01 70 61 72 73
+    65 72 00 10 01 11 37 00 00 00 00 00 00 00 12 FF
+    00 13 00 70 61 72 73 65 72 00 63 72 65 61 74 65
+    20 74 61 62 6C 65 20 74 65 73 74 28 63 6F 6C 75
+    6D 6E 31 20 69 6E 74 20 70 72 69 6D 61 72 79 20
+    6B 65 79 2C 20 63 6F 6C 75 6D 6E 32 20 63 68 61
+    72 28 35 30 29 2C 20 63 6F 6C 75 6D 6E 33 20 76
+    61 72 63 68 61 72 28 35 30 29 2C 20 63 6F 6C 75
+    6D 6E 34 20 64 61 74 65 74 69 6D 65 28 35 29 20
+    6E 6F 74 20 6E 75 6C 6C 2C 20 63 6F 6C 75 6D 6E
+    35 20 74 69 6D 65 73 74 61 6D 70 28 36 29 29
+ 
+VERBOSE
+    db name: parser, execute time: 0ms, error code: 0, thread id: 10
+    query: create table test(column1 int primary key, column2 char(50), column3 varchar(50), column4 datetime(5) not null, column5 timestamp(6))
+ 
 +------------------------------------------------------+
-0007) TIMESTAMP: Tue 2023-02-14 12:55:07
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 622(0x26E)
-FLAG(?): 0000
-CRC32: 95235480
-
+0007) 2023-03-08 17:58:05 End_log pos 733(0x2DD) LEN: 79(4F) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: C9D710F9
+ 
 HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 02 00 00 00 00 00 
-	00 00 03 00 00 00 00 00 00 00 D6 53 F8 ED A0 F4 
-	05 FC 00 02 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 2 AFTER 3
-	ORIGINAL COMMITTED TIMESTAMP: d6 53 f8 ed a0 f4 05 
-	TRANSACTION LENGTH: 512
-	SERVER VERSION: 80032
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    1D 4E 08 64 22 01 00 00 00 4F 00 00 00 DD 02 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 02 00 00
+    00 00 00 00 00 03 00 00 00 00 00 00 00 3D A1 F7
+    B9 5F F6 05 FC 96 01 A0 38 01 00
+ 
+VERBOSE
+    last committed: 2, sequence number: 3, original committed timestamp: 3120013629, immediate_commit_timestamp: 3120013629, transaction length: 406, original server version: 80032, immediate server version: 80032
+ 
 +------------------------------------------------------+
-0008) TIMESTAMP: Tue 2023-02-14 12:54:59
-LEN: 52(75)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 697(0x2B9)
-FLAG(?): 0008
-CRC32: 9635633
-
+0008) 2023-03-08 17:58:05 End_log pos 822(0x336) LEN: 89(59) EVENT TYPE: QUERY EVENT Server ID: 1 Flag: 0008 CRC32: 45E7091A
+ 
 HEX
-	08 00 00 00 00 00 00 00 04 00 00 1D 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 12 FF 00 74 65 73 74 00 42 
-	45 47 49 4E 
-
-DATA
-	UNKNOWN: 08 00 00 00 00 00 00 00 04 00 00 1d 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 12 ff 00 74 65 73 74 00 42 45 47 49 4e 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    1D 4E 08 64 02 01 00 00 00 59 00 00 00 36 03 00
+    00 08 00 0A 00 00 00 00 00 00 00 06 00 00 29 00
+    00 00 00 00 00 01 20 00 A0 45 00 00 00 00 06 03
+    73 74 64 04 FF 00 FF 00 FF 00 05 06 53 59 53 54
+    45 4D 0D E2 D1 0C 12 FF 00 70 61 72 73 65 72 00
+    42 45 47 49 4E
+ 
+VERBOSE
+    db name: parser, execute time: 0ms, error code: 0, thread id: 10
+    query: BEGIN
+ 
 +------------------------------------------------------+
-0009) TIMESTAMP: Tue 2023-02-14 12:54:59
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 762(0x2FA)
-FLAG(?): 0000
-CRC32: 9835C7CF
-
+0009) 2023-03-08 17:58:05 End_log pos 937(0x3A9) LEN: 115(73) EVENT TYPE: TABLE MAP EVENT Server ID: 1 Flag: 0000 CRC32: AB7B7F0D
+ 
 HEX
-	5A 00 00 00 00 00 01 00 04 74 65 73 74 00 07 72 
-	65 76 65 72 73 65 00 02 03 03 00 03 01 01 00 04 
-	06 02 63 31 02 63 32 0C 01 C0 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 4, SCHEMA NAME: test
-	TABLE NAME LENGTH: 7, TABLE NAME: reverse
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 03 
-	META LENGTH: 0
-		META DATA: 
-	CHK1: 
-	UNKNOWN 0x01 * 2: 03 01 
-	CHK2: 
-	UNKNOWN 0x04: 01 
-	COLUMN NAME LENGTH: 0
-		COLUMN NAME DATA: 
-	UNKNOWN: 04 06 02 63 31 02 63 32 0c 01 c0 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    1D 4E 08 64 13 01 00 00 00 73 00 00 00 A9 03 00
+    00 00 00 7F 00 00 00 00 00 01 00 06 70 61 72 73
+    65 72 00 04 74 65 73 74 00 05 03 FE 0F 12 11 06
+    FE C8 C8 00 05 06 16 01 01 00 02 03 FC FF 00 04
+    28 07 63 6F 6C 75 6D 6E 31 07 63 6F 6C 75 6D 6E
+    32 07 63 6F 6C 75 6D 6E 33 07 63 6F 6C 75 6D 6E
+    34 07 63 6F 6C 75 6D 6E 35 08 01 00 0C 01 F8
+ 
+VERBOSE
+# object name: `parser`.`test`, table id: 127, flags: 0001
+## `column1`, INT NOT NULL, PRIMARY KEY /* meta = 0 visible */
+## `column2`, CHAR /* meta = 65224 charset = 0 visible */
+## `column3`, VARCHAR /* meta = 200 charset = 0 visible */
+## `column4`, DATETIME NOT NULL /* meta = 5 visible */
+## `column5`, TIMESTAMP /* meta = 6 visible */
+ 
 +------------------------------------------------------+
-0010) TIMESTAMP: Tue 2023-02-14 12:54:59
-LEN: 21(44)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 806(0x326)
-FLAG(?): 0000
-CRC32: 9EB10A88
-
+0010) 2023-03-08 17:58:05 End_log pos 1029(0x405) LEN: 92(5C) EVENT TYPE: WRITE ROWS EVENT Server ID: 1 Flag: 0000 CRC32: DF5B4B38
+ 
 HEX
-	5A 00 00 00 00 00 01 00 02 00 02 FF 00 01 00 00 
-	00 01 00 00 00 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	CHK: 00 
-		C1 DATA: "" : 1 LONG_TYPE
-		C2 DATA: "" : 1 LONG_TYPE
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    1D 4E 08 64 1E 01 00 00 00 5C 00 00 00 05 04 00
+    00 00 00 7F 00 00 00 00 00 01 00 02 00 05 FF 00
+    01 00 00 00 18 74 65 73 74 20 6D 79 73 71 6C 20
+    62 69 6E 6C 6F 67 20 70 61 72 73 65 72 0B 74 65
+    73 74 69 6E 67 2E 2E 2E 21 99 AF 91 1E 85 0C D1
+    E0 64 08 4E 1D 0C D1 E2
+ 
+VERBOSE
+# INSERT `parser`.`test`
+##  AFTER
+###     @1=1 /* INT meta=0 nullable=0, is_null=0 */
+###     @2='test mysql binlog parser' /* CHAR(200) meta=65224 nullable=1, is_null=0 */
+###     @3='testing...!' /* VARCHAR(200) meta=200 nullable=1, is_null=0 */
+###     @4=2023-03-08 17:122:133.84016 /* DATETIME(5) meta=5 nullable=0, is_null=0 */
+###     @5=2023-03-08 17:58:05.840162 /* TIMESTAMP(6) meta=6 nullable=1, is_null=0 */
+ 
 +------------------------------------------------------+
-0011) TIMESTAMP: Tue 2023-02-14 12:55:02
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 871(0x367)
-FLAG(?): 0000
-CRC32: E9B54BF5
-
+0011) 2023-03-08 17:58:05 End_log pos 1060(0x424) LEN: 31(1F) EVENT TYPE: XID EVENT Server ID: 1 Flag: 0000 CRC32: FA1E0E9E
+ 
 HEX
-	5A 00 00 00 00 00 01 00 04 74 65 73 74 00 07 72 
-	65 76 65 72 73 65 00 02 03 03 00 03 01 01 00 04 
-	06 02 63 31 02 63 32 0C 01 C0 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 4, SCHEMA NAME: test
-	TABLE NAME LENGTH: 7, TABLE NAME: reverse
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 03 
-	META LENGTH: 0
-		META DATA: 
-	CHK1: 03 
-	UNKNOWN 0x01 * 2: 01 01 
-	CHK2: 00 
-	UNKNOWN 0x04: 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 0c 01 c0 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    1D 4E 08 64 10 01 00 00 00 1F 00 00 00 24 04 00
+    00 00 00 39 00 00 00 00 00 00 00
+ 
+VERBOSE
+    COMMIT /* Xid = 57 */
+ 
 +------------------------------------------------------+
-0012) TIMESTAMP: Tue 2023-02-14 12:55:02
-LEN: 21(44)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 915(0x393)
-FLAG(?): 0000
-CRC32: 80A7A96E
-
+0012) 2023-03-08 17:58:58 End_log pos 1139(0x473) LEN: 79(4F) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: F9B41D05
+ 
 HEX
-	5A 00 00 00 00 00 01 00 02 00 02 FF 00 01 00 00 
-	00 02 00 00 00 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	CHK: 00 
-	C1 LENGTH: 2
-		C1 DATA: 63 31 "c1" : 1 LONG_TYPE
-	C2 LENGTH: 2
-		C2 DATA: 63 32 "c2" : 2 LONG_TYPE
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    52 4E 08 64 22 01 00 00 00 4F 00 00 00 73 04 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 03 00 00
+    00 00 00 00 00 04 00 00 00 00 00 00 00 86 BF 1E
+    BD 5F F6 05 FC D5 01 A0 38 01 00
+ 
+VERBOSE
+    last committed: 3, sequence number: 4, original committed timestamp: 3172908934, immediate_commit_timestamp: 3172908934, transaction length: 469, original server version: 80032, immediate server version: 80032
+ 
 +------------------------------------------------------+
-0013) TIMESTAMP: Tue 2023-02-14 12:55:05
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 980(0x3D4)
-FLAG(?): 0000
-CRC32: 32FDBB43
-
+0013) 2023-03-08 17:58:58 End_log pos 1233(0x4D1) LEN: 94(5E) EVENT TYPE: QUERY EVENT Server ID: 1 Flag: 0008 CRC32: 55143F96
+ 
 HEX
-	5A 00 00 00 00 00 01 00 04 74 65 73 74 00 07 72 
-	65 76 65 72 73 65 00 02 03 03 00 03 01 01 00 04 
-	06 02 63 31 02 63 32 0C 01 C0 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 4, SCHEMA NAME: test
-	TABLE NAME LENGTH: 7, TABLE NAME: reverse
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 03 
-	META LENGTH: 0
-		META DATA: 
-	CHK1: 03 
-	UNKNOWN 0x01 * 2: 01 01 
-	CHK2: 00 
-	UNKNOWN 0x04: 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 0c 01 c0 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    52 4E 08 64 02 01 00 00 00 5E 00 00 00 D1 04 00
+    00 08 00 0A 00 00 00 00 00 00 00 06 00 00 2E 00
+    00 00 00 00 00 01 20 00 A0 45 00 00 00 00 06 03
+    73 74 64 04 FF 00 FF 00 FF 00 05 06 53 59 53 54
+    45 4D 09 01 00 00 00 00 00 00 00 12 FF 00 70 61
+    72 73 65 72 00 42 45 47 49 4E
+ 
+VERBOSE
+    db name: parser, execute time: 0ms, error code: 0, thread id: 10
+    query: BEGIN
+ 
 +------------------------------------------------------+
-0014) TIMESTAMP: Tue 2023-02-14 12:55:05
-LEN: 21(44)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 1024(0x400)
-FLAG(?): 0000
-CRC32: 13401178
-
+0014) 2023-03-08 17:58:58 End_log pos 1348(0x544) LEN: 115(73) EVENT TYPE: TABLE MAP EVENT Server ID: 1 Flag: 0000 CRC32: C7BC0E40
+ 
 HEX
-	5A 00 00 00 00 00 01 00 02 00 02 FF 00 01 00 00 
-	00 03 00 00 00 
-
-DATA
-	TABLE ID: 90
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	CHK: 00 
-	C1 LENGTH: 2
-		C1 DATA: 63 31 "c1" : 1 LONG_TYPE
-	C2 LENGTH: 2
-		C2 DATA: 63 32 "c2" : 3 LONG_TYPE
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    52 4E 08 64 13 01 00 00 00 73 00 00 00 44 05 00
+    00 00 00 7F 00 00 00 00 00 01 00 06 70 61 72 73
+    65 72 00 04 74 65 73 74 00 05 03 FE 0F 12 11 06
+    FE C8 C8 00 05 06 16 01 01 00 02 03 FC FF 00 04
+    28 07 63 6F 6C 75 6D 6E 31 07 63 6F 6C 75 6D 6E
+    32 07 63 6F 6C 75 6D 6E 33 07 63 6F 6C 75 6D 6E
+    34 07 63 6F 6C 75 6D 6E 35 08 01 00 0C 01 F8
+ 
+VERBOSE
+# object name: `parser`.`test`, table id: 127, flags: 0001
+## `column1`, INT NOT NULL, PRIMARY KEY /* meta = 0 visible */
+## `column2`, CHAR /* meta = 65224 charset = 0 visible */
+## `column3`, VARCHAR /* meta = 200 charset = 0 visible */
+## `column4`, DATETIME NOT NULL /* meta = 5 visible */
+## `column5`, TIMESTAMP /* meta = 6 visible */
+ 
 +------------------------------------------------------+
-0015) TIMESTAMP: Tue 2023-02-14 12:55:07
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 1055(0x41F)
-FLAG(?): 0000
-CRC32: D22459D7
-
+0015) 2023-03-08 17:58:58 End_log pos 1498(0x5DA) LEN: 150(96) EVENT TYPE: UPDATE ROWS EVENT Server ID: 1 Flag: 0000 CRC32: E6D3C6FF
+ 
 HEX
-	0F 00 00 00 00 00 00 00 
-
-DATA
-	XID : 15
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    52 4E 08 64 1F 01 00 00 00 96 00 00 00 DA 05 00
+    00 00 00 7F 00 00 00 00 00 01 00 02 00 05 FF FF
+    00 01 00 00 00 18 74 65 73 74 20 6D 79 73 71 6C
+    20 62 69 6E 6C 6F 67 20 70 61 72 73 65 72 0B 74
+    65 73 74 69 6E 67 2E 2E 2E 21 99 AF 91 1E 85 0C
+    D1 E0 64 08 4E 1D 0C D1 E2 00 01 00 00 00 18 74
+    65 73 74 20 6D 79 73 71 6C 20 62 69 6E 6C 6F 67
+    20 70 61 72 73 65 72 0B 74 65 73 74 69 6E 67 2E
+    2E 2E 21 99 AF 91 1E BA 00 00 00 64 08 4E 52 00
+    00 00
+ 
+VERBOSE
+# UPDATE `parser`.`test`
+##  BEFORE
+###     @1=1 /* INT meta=0 nullable=0, is_null=0 */
+###     @2='test mysql binlog parser' /* CHAR(200) meta=65224 nullable=1, is_null=0 */
+###     @3='testing...!' /* VARCHAR(200) meta=200 nullable=1, is_null=0 */
+###     @4=2023-03-08 17:122:133.84016 /* DATETIME(5) meta=5 nullable=0, is_null=0 */
+###     @5=2023-03-08 17:58:05.840162 /* TIMESTAMP(6) meta=6 nullable=1, is_null=0 */
+##  AFTER
+###     @1=1 /* INT meta=0 nullable=0, is_null=0 */
+###     @2='test mysql binlog parser' /* CHAR(200) meta=65224 nullable=1, is_null=0 */
+###     @3='testing...!' /* VARCHAR(200) meta=200 nullable=1, is_null=0 */
+###     @4=2023-03-08 17:122:186.00000 /* DATETIME(5) meta=5 nullable=0, is_null=0 */
+###     @5=2023-03-08 17:58:58.000000 /* TIMESTAMP(6) meta=6 nullable=1, is_null=0 */
+ 
++------------------------------------------------------+
+0016) 2023-03-08 17:58:58 End_log pos 1529(0x5F9) LEN: 31(1F) EVENT TYPE: XID EVENT Server ID: 1 Flag: 0000 CRC32: 871BFC5
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    52 4E 08 64 10 01 00 00 00 1F 00 00 00 F9 05 00
+    00 00 00 3A 00 00 00 00 00 00 00
+ 
+VERBOSE
+    COMMIT /* Xid = 58 */
+ 
++------------------------------------------------------+
+0017) 2023-03-08 17:59:33 End_log pos 1608(0x648) LEN: 79(4F) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: C81E6F4D
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    75 4E 08 64 22 01 00 00 00 4F 00 00 00 48 06 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 04 00 00
+    00 00 00 00 00 05 00 00 00 00 00 00 00 8D 7F 34
+    BF 5F F6 05 FC 8A 01 A0 38 01 00
+ 
+VERBOSE
+    last committed: 4, sequence number: 5, original committed timestamp: 3207888781, immediate_commit_timestamp: 3207888781, transaction length: 394, original server version: 80032, immediate server version: 80032
+ 
++------------------------------------------------------+
+0018) 2023-03-08 17:59:33 End_log pos 1685(0x695) LEN: 77(4D) EVENT TYPE: QUERY EVENT Server ID: 1 Flag: 0008 CRC32: 22961621
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    75 4E 08 64 02 01 00 00 00 4D 00 00 00 95 06 00
+    00 08 00 0A 00 00 00 00 00 00 00 06 00 00 1D 00
+    00 00 00 00 00 01 20 00 A0 45 00 00 00 00 06 03
+    73 74 64 04 FF 00 FF 00 FF 00 12 FF 00 70 61 72
+    73 65 72 00 42 45 47 49 4E
+ 
+VERBOSE
+    db name: parser, execute time: 0ms, error code: 0, thread id: 10
+    query: BEGIN
+ 
++------------------------------------------------------+
+0019) 2023-03-08 17:59:33 End_log pos 1800(0x708) LEN: 115(73) EVENT TYPE: TABLE MAP EVENT Server ID: 1 Flag: 0000 CRC32: E026E3C0
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    75 4E 08 64 13 01 00 00 00 73 00 00 00 08 07 00
+    00 00 00 7F 00 00 00 00 00 01 00 06 70 61 72 73
+    65 72 00 04 74 65 73 74 00 05 03 FE 0F 12 11 06
+    FE C8 C8 00 05 06 16 01 01 00 02 03 FC FF 00 04
+    28 07 63 6F 6C 75 6D 6E 31 07 63 6F 6C 75 6D 6E
+    32 07 63 6F 6C 75 6D 6E 33 07 63 6F 6C 75 6D 6E
+    34 07 63 6F 6C 75 6D 6E 35 08 01 00 0C 01 F8
+ 
+VERBOSE
+# object name: `parser`.`test`, table id: 127, flags: 0001
+## `column1`, INT NOT NULL, PRIMARY KEY /* meta = 0 visible */
+## `column2`, CHAR /* meta = 65224 charset = 0 visible */
+## `column3`, VARCHAR /* meta = 200 charset = 0 visible */
+## `column4`, DATETIME NOT NULL /* meta = 5 visible */
+## `column5`, TIMESTAMP /* meta = 6 visible */
+ 
++------------------------------------------------------+
+0020) 2023-03-08 17:59:33 End_log pos 1892(0x764) LEN: 92(5C) EVENT TYPE: DELETE ROWS EVENT Server ID: 1 Flag: 0000 CRC32: 9EF1292E
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    75 4E 08 64 20 01 00 00 00 5C 00 00 00 64 07 00
+    00 00 00 7F 00 00 00 00 00 01 00 02 00 05 FF 00
+    01 00 00 00 18 74 65 73 74 20 6D 79 73 71 6C 20
+    62 69 6E 6C 6F 67 20 70 61 72 73 65 72 0B 74 65
+    73 74 69 6E 67 2E 2E 2E 21 99 AF 91 1E BA 00 00
+    00 64 08 4E 52 00 00 00
+ 
+VERBOSE
+# DELETE `parser`.`test`
+##  BEFORE
+###     @1=1 /* INT meta=0 nullable=0, is_null=0 */
+###     @2='test mysql binlog parser' /* CHAR(200) meta=65224 nullable=1, is_null=0 */
+###     @3='testing...!' /* VARCHAR(200) meta=200 nullable=1, is_null=0 */
+###     @4=2023-03-08 17:122:186.00000 /* DATETIME(5) meta=5 nullable=0, is_null=0 */
+###     @5=2023-03-08 17:58:58.000000 /* TIMESTAMP(6) meta=6 nullable=1, is_null=0 */
+ 
++------------------------------------------------------+
+0021) 2023-03-08 17:59:33 End_log pos 1923(0x783) LEN: 31(1F) EVENT TYPE: XID EVENT Server ID: 1 Flag: 0000 CRC32: F2E373E2
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    75 4E 08 64 10 01 00 00 00 1F 00 00 00 83 07 00
+    00 00 00 3B 00 00 00 00 00 00 00
+ 
+VERBOSE
+    COMMIT /* Xid = 59 */
+ 
 +------------------------------------------------------+
 Process finished with exit code 0
 ```
 
-### Memo
+### 설명
 
-meta관련과 flag 관련 분석 후 구현 예정
+구조와 중요 이벤트 위주로 설명
 
-## Ver `23.02.13
+#### 공통 구조
 
-### Input
+구조는 크게 4가지로 구성
 
-실행 시 파라미터에 MySQL Binlog File의 이름을 입력하거나 실행 후 원하는 MySQL Binlog File의 이름을 입력
+- Common-Header: 모든 이벤트가 갖는 공통 구조, 19 Byte
 
--v 옵션을 통해 UNKNOWN 값 출력 가능
--h 옵션을 통해 Hex값 출력 가능
--d 옵션을 통해 기본 값이 아닌 디렉터리 사용 가능
+  | Name            | Byte   | Description                                                  |
+  | --------------- | ------ | ------------------------------------------------------------ |
+  | when            | 4 Byte | Timestamp(Unix Timestamp)                                    |
+  | op_code         | 1 Byte | Event를 구분하는 구분자                                      |
+  | server_id       | 4 Byte | Server ID                                                    |
+  | length          | 4 Byte | Event의 길이                                                 |
+  | master_position | 4 Byte | Master Server에서의 다음 이벤트의 시작 위치                  |
+  | flags           | 2 Byte | Format Description의 flags가 0x0001일 시 완료되지 않은 Binlog File, 나머지는 불확실 |
 
-따로 DB 연결 없이 작동
+  
 
-#### Example
+- Post-Header: 같은 이벤트끼리 같은 구조를 갖는 Event Header, 이벤트 당 고정 길이
+
+- Body: 가변 길이의 데이터
+
+- Footer: CRC32, Header의 length에 포함
+
+  | Name  | Byte   | Description |
+  | ----- | ------ | ----------- |
+  | crc32 | 4 Byte | CRC32       |
+
+#### Format Description
+
+File Header에 해당
 
 ```
-mysql_binlog_parser [-d <DIRECTORY PATH>] [-v] [-h] filename
+2023-03-08 17:55:03 End_log pos 126(0x7E) LEN: 122(7A) EVENT TYPE: FORMAT DESCRIPTION EVENT Server ID: 1 Flag: 0001 CRC32: E9822AC7
+ 
+HEX
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    67 4D 08 64 0F 01 00 00 00 7A 00 00 00 7E 00 00
+    00 01 00 04 00 38 2E 30 2E 33 32 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 13 00 0D 00 08
+    00 00 00 00 04 00 04 00 00 00 62 00 04 1A 08 00
+    00 00 08 08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12
+    34 00 0A 28 00 01
+ 
+VERBOSE
+    binlog version: 4, server version: 8.0.32, common header length: 19, date: 1970-01-01 09:00:00(0), number of event_types: 1
+    Post-Header length per event
+        QUERY EVENT: 13 ROTATE EVENT: 8 APPEND BLOCK EVENT: 4   DELETE FILE EVENT: 4    FORMAT DESCRIPTION EVENT: 98    BEGIN LOAD QUERY EVENT: 4   EXECUTE LOAD QUERY EVENT: 26
+        TABLE MAP EVENT: 8  WRITE ROWS EVENT V1: 8  UPDATE ROWS EVENT V1: 8 DELETE ROWS EVENT V1: 8 INCIDENT EVENT: 2   WRITE ROWS EVENT: 10    UPDATE ROWS EVENT: 10
+        DELETE ROWS EVENT: 10   GTID LOG EVENT: 42  ANONYMOUS GTID LOG EVENT: 42    TRANSACTION CONTEXT EVENT: 18   VIEW CHANGE EVENT: 52   PARTIAL UPDATE ROWS EVENT: 10   TRANSACTION PAYLOAD EVENT: 40
+ 
++------------------------------------------------------+
 ```
 
-### Output
+Binlog Version, Server Version, Common-Header Length, Event 별 Post-Header Length를 나타내 줌
 
-파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 출력
+#### Anonymous GTID
 
-옵션에 따라 출력
+Transaction의 시작 시 발생
 
-#### Example
+Master와 Slave를 운영하면 길이가 바뀔 것으로 예상(Original, Immediate)(테스트 필수)
 
 ```
-/clion/project/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser -v -h -d /var/lib/mysql/ bin.000003
-Verbose Hex Directory 
-File name: bin.000003
-
-0001) TIMESTAMP: Thu 2023-02-09 12:34:36
-LEN: 99(122)
-EVENT TYPE: FORMAT DESCRIPTION EVENT
-SERVER ID: 1
-POS: 126(0x7E)
-FLAG(?): 0000
-CRC32: FA61086
-
+2023-03-08 17:55:20 End_log pos 234(0xEA) LEN: 77(4D) EVENT TYPE: ANONYMOUS GTID LOG EVENT Server ID: 1 Flag: 0000 CRC32: EABC03B1
+ 
 HEX
-	04 00 38 2E 30 2E 33 32 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 13 00 0D 00 08 00 00 00 
-	00 04 00 04 00 00 00 62 00 04 1A 08 00 00 00 08 
-	08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12 34 00 0A 
-	28 00 01 
-
-DATA
-	UNKNOWN: 04 00 
-	VERSION: 8.0.32
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	TIMESTAMP: Thu 1970-01-01 09:00:00
-	UNKNOWN: 13 00 0d 00 08 00 00 00 00 04 00 04 00 00 00 62 00 04 1a 08 00 00 00 08 08 08 02 00 00 00 0a 0a 0a 2a 2a 00 12 34 00 0a 28 00 01 
+    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+    -----------------------------------------------
+    78 4D 08 64 22 01 00 00 00 4D 00 00 00 EA 00 00
+    00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00 00 00 00 00 00 00 00 02 00 00 00
+    00 00 00 00 00 01 00 00 00 00 00 00 00 E3 B4 15
+    B0 5F F6 05 BF A0 38 01 00
+ 
+VERBOSE
+    last committed: 0, sequence number: 1, original committed timestamp: 2954212579, immediate_commit_timestamp: 2954212579, transaction length: 191, original server version: 80032, immediate server version: 80032
+ 
 +------------------------------------------------------+
-0002) TIMESTAMP: Thu 2023-02-09 12:34:36
-LEN: 8(31)
-EVENT TYPE: PREVIOUS GTIDS LOG EVENT
-SERVER ID: 1
-POS: 157(0x9D)
-FLAG(?): 0080
-CRC32: AE5D48F0
-
-HEX
-	00 00 00 00 00 00 00 00 
-
-DATA
-	XID : 0
-+------------------------------------------------------+
-0003) TIMESTAMP: Thu 2023-02-09 12:43:18
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 236(0xEC)
-FLAG(?): 0000
-CRC32: ACB6457E
-
-HEX
-	01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 00 00 00 00 00 00 
-	00 00 01 00 00 00 00 00 00 00 54 10 77 2E 3C F4 
-	05 FC 03 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 0 AFTER 1
-	ORIGINAL COMMITTED TIMESTAMP: 54 10 77 2e 3c f4 05 
-	TRANSACTION LENGTH: 259
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0004) TIMESTAMP: Thu 2023-02-09 12:43:18
-LEN: 157(180)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 416(0x1A0)
-FLAG(?): 0000
-CRC32: 77ECBD34
-
-HEX
-	20 00 00 00 00 00 00 00 01 00 00 2E 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 0C 01 61 00 10 01 11 03 05 
-	00 00 00 00 00 00 12 FF 00 13 00 61 00 2F 2A 20 
-	41 70 70 6C 69 63 61 74 69 6F 6E 4E 61 6D 65 3D 
-	44 61 74 61 47 72 69 70 20 32 30 32 31 2E 31 2E 
-	33 20 2A 2F 20 63 72 65 61 74 65 20 74 61 62 6C 
-	65 20 74 65 73 74 5F 61 28 63 31 20 69 6E 74 20 
-	70 72 69 6D 61 72 79 20 6B 65 79 2C 20 63 32 20 
-	74 69 6D 65 73 74 61 6D 70 28 36 29 29 
-
-DATA
-	UNKNOWN: 20 00 00 00 00 00 00 00 01 00 00 2e 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 61 00 10 01 11 03 05 00 00 00 00 00 00 12 ff 00 13 00 61 00 2f 2a 20 41 70 70 6c 69 63 61 74 69 6f 6e 4e 61 6d 65 3d 44 61 74 61 47 72 69 70 20 32 30 32 31 2e 31 2e 33 20 2a 2f 20 63 72 65 61 74 65 20 74 61 62 6c 65 20 74 65 73 74 5f 61 28 63 31 20 69 6e 74 20 70 72 69 6d 61 72 79 20 6b 65 79 2c 20 63 32 20 74 69 6d 65 73 74 61 6d 70 28 36 29 29 
-+------------------------------------------------------+
-0005) TIMESTAMP: Thu 2023-02-09 12:43:21
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 495(0x1EF)
-FLAG(?): 0000
-CRC32: 284807AC
-
-HEX
-	01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 01 00 00 00 00 00 
-	00 00 02 00 00 00 00 00 00 00 32 30 AC 2E 3C F4 
-	05 FC 03 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 1 AFTER 2
-	ORIGINAL COMMITTED TIMESTAMP: 32 30 ac 2e 3c f4 05 
-	TRANSACTION LENGTH: 259
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0006) TIMESTAMP: Thu 2023-02-09 12:43:21
-LEN: 157(180)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 675(0x2A3)
-FLAG(?): 0000
-CRC32: 6605D32B
-
-HEX
-	19 00 00 00 00 00 00 00 01 00 00 2E 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 0C 01 62 00 10 01 11 9B 05 
-	00 00 00 00 00 00 12 FF 00 13 00 62 00 2F 2A 20 
-	41 70 70 6C 69 63 61 74 69 6F 6E 4E 61 6D 65 3D 
-	44 61 74 61 47 72 69 70 20 32 30 32 31 2E 31 2E 
-	33 20 2A 2F 20 63 72 65 61 74 65 20 74 61 62 6C 
-	65 20 74 65 73 74 5F 62 28 63 31 20 69 6E 74 20 
-	70 72 69 6D 61 72 79 20 6B 65 79 2C 20 63 32 20 
-	74 69 6D 65 73 74 61 6D 70 28 36 29 29 
-
-DATA
-	UNKNOWN: 19 00 00 00 00 00 00 00 01 00 00 2e 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 62 00 10 01 11 9b 05 00 00 00 00 00 00 12 ff 00 13 00 62 00 2f 2a 20 41 70 70 6c 69 63 61 74 69 6f 6e 4e 61 6d 65 3d 44 61 74 61 47 72 69 70 20 32 30 32 31 2e 31 2e 33 20 2a 2f 20 63 72 65 61 74 65 20 74 61 62 6c 65 20 74 65 73 74 5f 62 28 63 31 20 69 6e 74 20 70 72 69 6d 61 72 79 20 6b 65 79 2c 20 63 32 20 74 69 6d 65 73 74 61 6d 70 28 36 29 29 
-+------------------------------------------------------+
-0007) TIMESTAMP: Thu 2023-02-09 12:43:29
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 754(0x2F2)
-FLAG(?): 0000
-CRC32: 254F2B6D
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 02 00 00 00 00 00 
-	00 00 03 00 00 00 00 00 00 00 13 0E 1B 2F 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 2 AFTER 3
-	ORIGINAL COMMITTED TIMESTAMP: 13 0e 1b 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0008) TIMESTAMP: Thu 2023-02-09 12:43:29
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 834(0x342)
-FLAG(?): 0008
-CRC32: 776482E8
-
-HEX
-	20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 61 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0009) TIMESTAMP: Thu 2023-02-09 12:43:29
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 899(0x383)
-FLAG(?): 0000
-CRC32: 82FE311C
-
-HEX
-	7B 00 00 00 00 00 01 00 01 61 00 06 74 65 73 74 
-	5F 61 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0010) TIMESTAMP: Thu 2023-02-09 12:43:29
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 946(0x3B2)
-FLAG(?): 0000
-CRC32: 285256A5
-
-HEX
-	7B 00 00 00 00 00 01 00 02 00 02 FF 00 01 00 00 
-	00 63 E4 6B E1 00 00 00 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 01 00 00 00 63 e4 6b e1 00 00 00 
-+------------------------------------------------------+
-0011) TIMESTAMP: Thu 2023-02-09 12:43:29
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 977(0x3D1)
-FLAG(?): 0000
-CRC32: E7D222E5
-
-HEX
-	33 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1587
-+------------------------------------------------------+
-0012) TIMESTAMP: Thu 2023-02-09 12:43:31
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 1056(0x420)
-FLAG(?): 0000
-CRC32: 8A14388D
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 03 00 00 00 00 00 
-	00 00 04 00 00 00 00 00 00 00 FF F5 3E 2F 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 3 AFTER 4
-	ORIGINAL COMMITTED TIMESTAMP: ff f5 3e 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0013) TIMESTAMP: Thu 2023-02-09 12:43:31
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 1136(0x470)
-FLAG(?): 0008
-CRC32: B8F55CB6
-
-HEX
-	20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 61 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0014) TIMESTAMP: Thu 2023-02-09 12:43:31
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 1201(0x4B1)
-FLAG(?): 0000
-CRC32: 711C0766
-
-HEX
-	7B 00 00 00 00 00 01 00 01 61 00 06 74 65 73 74 
-	5F 61 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0015) TIMESTAMP: Thu 2023-02-09 12:43:31
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 1248(0x4E0)
-FLAG(?): 0000
-CRC32: 7714103F
-
-HEX
-	7B 00 00 00 00 00 01 00 02 00 02 FF 00 02 00 00 
-	00 63 E4 6B E3 00 00 00 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 02 00 00 00 63 e4 6b e3 00 00 00 
-+------------------------------------------------------+
-0016) TIMESTAMP: Thu 2023-02-09 12:43:31
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 1279(0x4FF)
-FLAG(?): 0000
-CRC32: 21BCAE69
-
-HEX
-	42 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1602
-+------------------------------------------------------+
-0017) TIMESTAMP: Thu 2023-02-09 12:43:37
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 1358(0x54E)
-FLAG(?): 0000
-CRC32: 24581E46
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 04 00 00 00 00 00 
-	00 00 05 00 00 00 00 00 00 00 70 5B 9E 2F 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 4 AFTER 5
-	ORIGINAL COMMITTED TIMESTAMP: 70 5b 9e 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0018) TIMESTAMP: Thu 2023-02-09 12:43:37
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 1438(0x59E)
-FLAG(?): 0008
-CRC32: D0B3140D
-
-HEX
-	20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 61 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0019) TIMESTAMP: Thu 2023-02-09 12:43:37
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 1503(0x5DF)
-FLAG(?): 0000
-CRC32: B75678A3
-
-HEX
-	7B 00 00 00 00 00 01 00 01 61 00 06 74 65 73 74 
-	5F 61 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0020) TIMESTAMP: Thu 2023-02-09 12:43:37
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 1550(0x60E)
-FLAG(?): 0000
-CRC32: BDADFBD0
-
-HEX
-	7B 00 00 00 00 00 01 00 02 00 02 FF 00 03 00 00 
-	00 63 E4 6B E9 00 00 00 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 03 00 00 00 63 e4 6b e9 00 00 00 
-+------------------------------------------------------+
-0021) TIMESTAMP: Thu 2023-02-09 12:43:37
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 1581(0x62D)
-FLAG(?): 0000
-CRC32: A03F7ED3
-
-HEX
-	60 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1632
-+------------------------------------------------------+
-0022) TIMESTAMP: Thu 2023-02-09 12:43:51
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 1660(0x67C)
-FLAG(?): 0000
-CRC32: 2F71CE8E
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 05 00 00 00 00 00 
-	00 00 06 00 00 00 00 00 00 00 65 AE 6B 30 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 5 AFTER 6
-	ORIGINAL COMMITTED TIMESTAMP: 65 ae 6b 30 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0023) TIMESTAMP: Thu 2023-02-09 12:43:51
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 1740(0x6CC)
-FLAG(?): 0008
-CRC32: FD30C593
-
-HEX
-	23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 62 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0024) TIMESTAMP: Thu 2023-02-09 12:43:51
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 1805(0x70D)
-FLAG(?): 0000
-CRC32: 474FE14B
-
-HEX
-	7C 00 00 00 00 00 01 00 01 62 00 06 74 65 73 74 
-	5F 62 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0025) TIMESTAMP: Thu 2023-02-09 12:43:51
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 1852(0x73C)
-FLAG(?): 0000
-CRC32: 29B655CC
-
-HEX
-	7C 00 00 00 00 00 01 00 02 00 02 FF 00 04 00 00 
-	00 63 E4 6B F7 00 00 00 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 04 00 00 00 63 e4 6b f7 00 00 00 
-+------------------------------------------------------+
-0026) TIMESTAMP: Thu 2023-02-09 12:43:51
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 1883(0x75B)
-FLAG(?): 0000
-CRC32: 39D5478F
-
-HEX
-	77 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1655
-+------------------------------------------------------+
-0027) TIMESTAMP: Thu 2023-02-09 12:43:56
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 1962(0x7AA)
-FLAG(?): 0000
-CRC32: B87B46B8
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 06 00 00 00 00 00 
-	00 00 07 00 00 00 00 00 00 00 8E 9B BB 30 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 6 AFTER 7
-	ORIGINAL COMMITTED TIMESTAMP: 8e 9b bb 30 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0028) TIMESTAMP: Thu 2023-02-09 12:43:56
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 2042(0x7FA)
-FLAG(?): 0008
-CRC32: F46AF3B7
-
-HEX
-	24 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 61 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 24 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0029) TIMESTAMP: Thu 2023-02-09 12:43:56
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 2107(0x83B)
-FLAG(?): 0000
-CRC32: 25B18EE0
-
-HEX
-	7B 00 00 00 00 00 01 00 01 61 00 06 74 65 73 74 
-	5F 61 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0030) TIMESTAMP: Thu 2023-02-09 12:43:56
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 2154(0x86A)
-FLAG(?): 0000
-CRC32: 2FCCD008
-
-HEX
-	7B 00 00 00 00 00 01 00 02 00 02 FF 00 05 00 00 
-	00 63 E4 6B FC 00 00 00 
-
-DATA
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 05 00 00 00 63 e4 6b fc 00 00 00 
-+------------------------------------------------------+
-0031) TIMESTAMP: Thu 2023-02-09 12:43:56
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 2185(0x889)
-FLAG(?): 0000
-CRC32: CA818640
-
-HEX
-	8E 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1678
-+------------------------------------------------------+
-0032) TIMESTAMP: Thu 2023-02-09 12:44:00
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 2264(0x8D8)
-FLAG(?): 0000
-CRC32: B9C7395D
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 07 00 00 00 00 00 
-	00 00 08 00 00 00 00 00 00 00 69 79 02 31 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 7 AFTER 8
-	ORIGINAL COMMITTED TIMESTAMP: 69 79 02 31 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0033) TIMESTAMP: Thu 2023-02-09 12:44:00
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 2344(0x928)
-FLAG(?): 0008
-CRC32: 1FDEB31A
-
-HEX
-	23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 62 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0034) TIMESTAMP: Thu 2023-02-09 12:44:00
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 2409(0x969)
-FLAG(?): 0000
-CRC32: CD45C3F8
-
-HEX
-	7C 00 00 00 00 00 01 00 01 62 00 06 74 65 73 74 
-	5F 62 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0035) TIMESTAMP: Thu 2023-02-09 12:44:00
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 2456(0x998)
-FLAG(?): 0000
-CRC32: A95AEF51
-
-HEX
-	7C 00 00 00 00 00 01 00 02 00 02 FF 00 06 00 00 
-	00 63 E4 6C 00 00 00 00 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 06 00 00 00 63 e4 6c 00 00 00 00 
-+------------------------------------------------------+
-0036) TIMESTAMP: Thu 2023-02-09 12:44:00
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 2487(0x9B7)
-FLAG(?): 0000
-CRC32: 2066B851
-
-HEX
-	9D 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1693
-+------------------------------------------------------+
-0037) TIMESTAMP: Thu 2023-02-09 12:44:04
-LEN: 56(79)
-EVENT TYPE: ANONYMOUS GTID LOG EVENT
-SERVER ID: 1
-POS: 2566(0xA06)
-FLAG(?): 0000
-CRC32: AC5D64AD
-
-HEX
-	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	00 00 00 00 00 00 00 00 00 02 08 00 00 00 00 00 
-	00 00 09 00 00 00 00 00 00 00 98 82 39 31 3C F4 
-	05 FC 2E 01 A0 38 01 00 
-
-DATA
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 8 AFTER 9
-	ORIGINAL COMMITTED TIMESTAMP: 98 82 39 31 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-+------------------------------------------------------+
-0038) TIMESTAMP: Thu 2023-02-09 12:44:04
-LEN: 57(80)
-EVENT TYPE: QUERY EVENT
-SERVER ID: 1
-POS: 2646(0xA56)
-FLAG(?): 0008
-CRC32: AAEC454F
-
-HEX
-	23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 
-	00 00 01 20 00 A0 45 00 00 00 00 06 03 73 74 64 
-	04 FF 00 FF 00 FF 00 05 06 53 59 53 54 45 4D 12 
-	FF 00 62 00 42 45 47 49 4E 
-
-DATA
-	UNKNOWN: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-+------------------------------------------------------+
-0039) TIMESTAMP: Thu 2023-02-09 12:44:04
-LEN: 42(65)
-EVENT TYPE: TABLE MAP EVENT
-SERVER ID: 1
-POS: 2711(0xA97)
-FLAG(?): 0000
-CRC32: E253A09E
-
-HEX
-	7C 00 00 00 00 00 01 00 01 62 00 06 74 65 73 74 
-	5F 62 00 02 03 11 01 06 02 01 01 00 04 06 02 63 
-	31 02 63 32 08 01 00 0C 01 C0 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-		COLUMN DATA: 03 11 
-	META LENGTH: 1
-		META DATA: 06 
-	UNKNOWN LENGTH: 2
-		UNKNOWN DATA: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-		COLUMN NAME DATA: 02 63 31 02 63 32 
-	UNKNOWN: 08 01 00 0c 01 c0 
-+------------------------------------------------------+
-0040) TIMESTAMP: Thu 2023-02-09 12:44:04
-LEN: 24(47)
-EVENT TYPE: WRITE ROWS EVENT
-SERVER ID: 1
-POS: 2758(0xAC6)
-FLAG(?): 0000
-CRC32: 5C998F7D
-
-HEX
-	7C 00 00 00 00 00 01 00 02 00 02 FF 00 07 00 00 
-	00 63 E4 6C 04 00 00 00 
-
-DATA
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	DML COLUMN LENGTH LENGTH: 2
-	CHK BIT: ff 
-	UNKNOWN: 00 07 00 00 00 63 e4 6c 04 00 00 00 
-+------------------------------------------------------+
-0041) TIMESTAMP: Thu 2023-02-09 12:44:04
-LEN: 8(31)
-EVENT TYPE: XID EVENT
-SERVER ID: 1
-POS: 2789(0xAE5)
-FLAG(?): 0000
-CRC32: 73EFE309
-
-HEX
-	AC 06 00 00 00 00 00 00 
-
-DATA
-	XID : 1708
-+------------------------------------------------------+
-0042) TIMESTAMP: Thu 2023-02-09 12:49:02
-LEN: 18(41)
-EVENT TYPE: ROTATE EVENT
-SERVER ID: 1
-POS: 2830(0xB0E)
-FLAG(?): 0000
-CRC32: D1756DB3
-
-HEX
-	04 00 00 00 00 00 00 00 62 69 6E 2E 30 30 30 30 
-	30 34 
-
-DATA
-	UNKNOWN: 04 
-	SWITCH FILE NAME: bin.000004
-+------------------------------------------------------+
-Process finished with exit code 0
-
 ```
 
-## Ver `23.02.10
 
-### Input
 
-실행 시 파라미터에 MySQL Binlog File의 이름을 입력하거나 실행 후 리스트에서 원하는 MySQL Binlog File의 이름을 입력
--v 옵션을 통해 상세 값 출력 가능
-따로 DB 연결 없이 작동
 
-#### Example
 
-```
--v bin.000003
-```
+#### Query
 
-### Output
-
-파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 출력
-
-파일명 출력, Buffer 구분 번호, Server ID, Event Type, 총 길이, Unknown Flag, CRC32 값 출력
-특정 Operation Code에 맞는 값을 -v 옵션 사용 시 상세 Binary 값 출력, 아닐 경우 파악한 변수만 출력
-
-#### Example
-
-```
-/clion/project/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser -v bin.000003
-Verbose
-File name: bin.000003 Option: V
-
-0001)	LEN: 99(122)	SERVER ID: 1	EVENT TYPE: FORMAT DESCRIPTION EVENT	POS: 126	UNKNOWN FLAG: 0000	CRC32: FA61086
-	UNKNOWN: 04 00 
-	VERSION: 8.0.32
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	TIMESTAMP: Thu 1970-01-01 09:00:00
-	OTHER: 13 00 0d 00 08 00 00 00 00 04 00 04 00 00 00 62 00 04 1a 08 00 00 00 08 08 08 02 00 00 00 0a 0a 0a 2a 2a 00 12 34 00 0a 28 00 01 
-0002)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	POS: 157	UNKNOWN FLAG: 0080	CRC32: AE5D48F0
-	XID : 0
-0003)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 236	UNKNOWN FLAG: 0000	CRC32: ACB6457E
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 0 AFTER 1
-	ORIGINAL COMMITTED TIMESTAMP: 54 10 77 2e 3c f4 05 
-	TRANSACTION LENGTH: 259
-	SERVER VERSION: 80032
-0004)	LEN: 157(180)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 416	UNKNOWN FLAG: 0000	CRC32: 77ECBD34
-	OTHER: 20 00 00 00 00 00 00 00 01 00 00 2e 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 61 00 10 01 11 03 05 00 00 00 00 00 00 12 ff 00 13 00 61 00 2f 2a 20 41 70 70 6c 69 63 61 74 69 6f 6e 4e 61 6d 65 3d 44 61 74 61 47 72 69 70 20 32 30 32 31 2e 31 2e 33 20 2a 2f 20 63 72 65 61 74 65 20 74 61 62 6c 65 20 74 65 73 74 5f 61 28 63 31 20 69 6e 74 20 70 72 69 6d 61 72 79 20 6b 65 79 2c 20 63 32 20 74 69 6d 65 73 74 61 6d 70 28 36 29 29 
-0005)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 495	UNKNOWN FLAG: 0000	CRC32: 284807AC
-	UNKNOWN: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 1 AFTER 2
-	ORIGINAL COMMITTED TIMESTAMP: 32 30 ac 2e 3c f4 05 
-	TRANSACTION LENGTH: 259
-	SERVER VERSION: 80032
-0006)	LEN: 157(180)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 675	UNKNOWN FLAG: 0000	CRC32: 6605D32B
-	OTHER: 19 00 00 00 00 00 00 00 01 00 00 2e 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 0c 01 62 00 10 01 11 9b 05 00 00 00 00 00 00 12 ff 00 13 00 62 00 2f 2a 20 41 70 70 6c 69 63 61 74 69 6f 6e 4e 61 6d 65 3d 44 61 74 61 47 72 69 70 20 32 30 32 31 2e 31 2e 33 20 2a 2f 20 63 72 65 61 74 65 20 74 61 62 6c 65 20 74 65 73 74 5f 62 28 63 31 20 69 6e 74 20 70 72 69 6d 61 72 79 20 6b 65 79 2c 20 63 32 20 74 69 6d 65 73 74 61 6d 70 28 36 29 29 
-0007)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 754	UNKNOWN FLAG: 0000	CRC32: 254F2B6D
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 2 AFTER 3
-	ORIGINAL COMMITTED TIMESTAMP: 13 0e 1b 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0008)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 834	UNKNOWN FLAG: 0008	CRC32: 776482E8
-	OTHER: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-0009)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 899	UNKNOWN FLAG: 0000	CRC32: 82FE311C
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0010)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 946	UNKNOWN FLAG: 0000	CRC32: 285256A5
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 01 00 00 00 63 e4 6b e1 00 00 00 
-0011)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 977	UNKNOWN FLAG: 0000	CRC32: E7D222E5
-	XID : 1587
-0012)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 1056	UNKNOWN FLAG: 0000	CRC32: 8A14388D
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 3 AFTER 4
-	ORIGINAL COMMITTED TIMESTAMP: ff f5 3e 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0013)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 1136	UNKNOWN FLAG: 0008	CRC32: B8F55CB6
-	OTHER: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-0014)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 1201	UNKNOWN FLAG: 0000	CRC32: 711C0766
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0015)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 1248	UNKNOWN FLAG: 0000	CRC32: 7714103F
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 02 00 00 00 63 e4 6b e3 00 00 00 
-0016)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 1279	UNKNOWN FLAG: 0000	CRC32: 21BCAE69
-	XID : 1602
-0017)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 1358	UNKNOWN FLAG: 0000	CRC32: 24581E46
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 4 AFTER 5
-	ORIGINAL COMMITTED TIMESTAMP: 70 5b 9e 2f 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0018)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 1438	UNKNOWN FLAG: 0008	CRC32: D0B3140D
-	OTHER: 20 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-0019)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 1503	UNKNOWN FLAG: 0000	CRC32: B75678A3
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0020)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 1550	UNKNOWN FLAG: 0000	CRC32: BDADFBD0
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 03 00 00 00 63 e4 6b e9 00 00 00 
-0021)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 1581	UNKNOWN FLAG: 0000	CRC32: A03F7ED3
-	XID : 1632
-0022)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 1660	UNKNOWN FLAG: 0000	CRC32: 2F71CE8E
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 5 AFTER 6
-	ORIGINAL COMMITTED TIMESTAMP: 65 ae 6b 30 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0023)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 1740	UNKNOWN FLAG: 0008	CRC32: FD30C593
-	OTHER: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-0024)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 1805	UNKNOWN FLAG: 0000	CRC32: 474FE14B
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0025)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 1852	UNKNOWN FLAG: 0000	CRC32: 29B655CC
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 04 00 00 00 63 e4 6b f7 00 00 00 
-0026)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 1883	UNKNOWN FLAG: 0000	CRC32: 39D5478F
-	XID : 1655
-0027)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 1962	UNKNOWN FLAG: 0000	CRC32: B87B46B8
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 6 AFTER 7
-	ORIGINAL COMMITTED TIMESTAMP: 8e 9b bb 30 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0028)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 2042	UNKNOWN FLAG: 0008	CRC32: F46AF3B7
-	OTHER: 24 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 61 00 42 45 47 49 4e 
-0029)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 2107	UNKNOWN FLAG: 0000	CRC32: 25B18EE0
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: a
-	TABLE NAME LENGTH: 6, TABLE NAME: test_a
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0030)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 2154	UNKNOWN FLAG: 0000	CRC32: 2FCCD008
-	TABLE ID: 123
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 05 00 00 00 63 e4 6b fc 00 00 00 
-0031)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 2185	UNKNOWN FLAG: 0000	CRC32: CA818640
-	XID : 1678
-0032)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 2264	UNKNOWN FLAG: 0000	CRC32: B9C7395D
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 7 AFTER 8
-	ORIGINAL COMMITTED TIMESTAMP: 69 79 02 31 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0033)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 2344	UNKNOWN FLAG: 0008	CRC32: 1FDEB31A
-	OTHER: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-0034)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 2409	UNKNOWN FLAG: 0000	CRC32: CD45C3F8
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0035)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 2456	UNKNOWN FLAG: 0000	CRC32: A95AEF51
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 06 00 00 00 63 e4 6c 00 00 00 00 
-0036)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 2487	UNKNOWN FLAG: 0000	CRC32: 2066B851
-	XID : 1693
-0037)	LEN: 56(79)	SERVER ID: 1	EVENT TYPE: ANONYMOUS GTID LOG EVENT	POS: 2566	UNKNOWN FLAG: 0000	CRC32: AC5D64AD
-	UNKNOWN: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-	UNKNOWN len?: 02 
-	BEFORE: 8 AFTER 9
-	ORIGINAL COMMITTED TIMESTAMP: 98 82 39 31 3c f4 05 
-	TRANSACTION LENGTH: 302
-	SERVER VERSION: 80032
-0038)	LEN: 57(80)	SERVER ID: 1	EVENT TYPE: QUERY EVENT	POS: 2646	UNKNOWN FLAG: 0008	CRC32: AAEC454F
-	OTHER: 23 00 00 00 00 00 00 00 01 00 00 25 00 00 00 00 00 00 01 20 00 a0 45 00 00 00 00 06 03 73 74 64 04 ff 00 ff 00 ff 00 05 06 53 59 53 54 45 4d 12 ff 00 62 00 42 45 47 49 4e 
-0039)	LEN: 42(65)	SERVER ID: 1	EVENT TYPE: TABLE MAP EVENT	POS: 2711	UNKNOWN FLAG: 0000	CRC32: E253A09E
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 
-	SCHEMA(DATABASE) NAME LENGTH: 1, SCHEMA NAME: b
-	TABLE NAME LENGTH: 6, TABLE NAME: test_b
-	COLUMN LENGTH: 2
-	COLUMN: 03 11 
-	META LENGTH: 1
-	META: 06 
-	UNKNOWN LENGTH: 2
-	UNKNOWN: 01 01 
-	UNKNOWN FLAG: 00 04 
-	COLUMN NAME LENGTH: 6
-	COLUMN NAME: 02 63 31 02 63 32 
-	OTHER: 08 01 00 0c 01 c0 
-0040)	LEN: 24(47)	SERVER ID: 1	EVENT TYPE: WRITE ROWS EVENT	POS: 2758	UNKNOWN FLAG: 0000	CRC32: 5C998F7D
-	TABLE ID: 124
-	UNKNOWN: 00 00 01 00 02 00 
-	COLUMN NUM: 2
-	UNKNOWN: ff 
-	OTHER: 00 07 00 00 00 63 e4 6c 04 00 00 00 
-0041)	LEN: 8(31)	SERVER ID: 1	EVENT TYPE: XID EVENT	POS: 2789	UNKNOWN FLAG: 0000	CRC32: 73EFE309
-	XID : 1708
-0042)	LEN: 18(41)	SERVER ID: 1	EVENT TYPE: ROTATE EVENT	POS: 2830	UNKNOWN FLAG: 0000	CRC32: D1756DB3
-	UNKNOWN: 04 
-	SWITCH FILE NAME: bin.000004
-0043)	LEN: 18(41)	SERVER ID: 1	EVENT TYPE: ROTATE EVENT	POS: 2830	UNKNOWN FLAG: 0000	CRC32: D1756DB3
-	UNKNOWN: 5f 
-	SWITCH FILE NAME: bin.000004
-Process finished with exit code 0
-```
-
-## Ver `23.02.08
-
-### Input
-
-실행 시 파라미터에 MySQL Binlog File의 이름을 입력하거나 실행 후 리스트에서 원하는 MySQL Binlog File의 이름을 입력
-실행 후 리스트를 출력하기 위해 DB 접속이 필수적이기에 DB 관련 정보 값을 `DB_XXXX`에 알맞은 값 기입
-
-#### Example
-
-```
-mysql-bin.000038
-```
-
-### Output
-
-파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 출력
-
-파라미터 입력이 아닐 시 입력 전 DB의 `SHOW BINARY LOGS`의 결과 값을 출력해 읽을 수 있는 파일 리스트 출력
-
-파일명 출력, Buffer 구분 번호, Server ID, Event Type, 총 길이, Unknown Flag, CRC32 값 출력
-이후 파악된 값은 구분해 변수로 출력, 모르는 값의 경우 Buffer값 그대로 출력
-
-특정 Operation Code에 맞는 값을 추가적으로 출력
-
-#### Example
-
-```
-/root/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser mysql-bin.000038
-
-File name: mysql-bin.000038
-
-0001)	LEN: 99(122)	SERVER ID: 2	EVENT TYPE: FORMAT DESCRIPTION EVENT	POS: 126	UNKNOWN FLAG: 0001	CRC32: FA86A933
-04 00 38 2E 30 2E 33 31 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 50 9A E1 63 13 00 0D 00 08 00 00 00 
-00 04 00 04 00 00 00 62 00 04 1A 08 00 00 00 08 
-08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12 34 00 0A 
-28 00 01 
-
-0002)	LEN: 8(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	POS: 157	UNKNOWN FLAG: 0080	CRC32: EB5DD0A1
-XID : 0
-
-
-0003)	LEN: 8(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	POS: 157	UNKNOWN FLAG: 0080	CRC32: EB5DD0A1
-XID : 0
-
-
-Process finished with exit code 0
-```
-
-## Ver `23.02.07
-
-### Input
-
-실행 시 파라미터에 MySQL Binlog File의 이름을 입력하거나 실행 후 리스트에서 원하는 MySQL Binlog File의 이름을 입력
-실행 후 리스트를 출력하기 위해 DB 접속이 필수적이기에 DB 관련 정보 값을 `DB_XXXX`에 알맞은 값 기입
-
-#### Example
-
-```
-mysql-bin.000038
-```
-
-### Output
-
-파라미터로 입력 시 바로 MySQL Binlog File의 분석 값이 출력
-
-파라미터 입력이 아닐 시 입력 전 DB의 `SHOW BINARY LOGS`의 결과 값을 출력해 읽을 수 있는 파일 리스트 출력
-
-파일명 출력, Buffer 구분 번호, Server ID, Event Type, 총 길이, Unknown Flag, CRC32 값 출력
-이후 파악된 값은 구분해 변수로 출력, 모르는 값의 경우 Buffer값 그대로 출력
-
-#### Example
-
-```
-/root/mysql_binlog_parser/cmake-build-debug/mysql_binlog_parser mysql-bin.000038
-
-File name: mysql-bin.000038
-
-0001)	LEN: 99(122)	SERVER ID: 2	EVENT TYPE: FORMAT DESCRIPTION EVENT	POS: 126	UNKNOWN FLAG: 0001	CRC32: FA86A933
-04 00 38 2E 30 2E 33 31 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 50 9A E1 63 13 00 0D 00 08 00 00 00 
-00 04 00 04 00 00 00 62 00 04 1A 08 00 00 00 08 
-08 08 02 00 00 00 0A 0A 0A 2A 2A 00 12 34 00 0A 
-28 00 01 
-
-0002)	LEN: 8(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	POS: 157	UNKNOWN FLAG: 0080	CRC32: EB5DD0A1
-XID : 0
-
-
-0003)	LEN: 8(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	POS: 157	UNKNOWN FLAG: 0080	CRC32: EB5DD0A1
-XID : 0
-
-
-Process finished with exit code 0
-```
-
-## Ver `23.01.25
-
-### Input
-
-DB 접속을 위해 해당 정보 값을 `DB_XXXX`에 기입한 후 읽기 원하는 파일명을 입력
-
-#### Example
-
-```
-mysql-bin.000025
-```
-
-### Output
-
-입력 전 DB의 `SHOW BINARY LOGS`의 결과 값을 출력해 읽을 수 있는 파일 리스트 출력
-
-입력 후 파일명 출력 후 한 Buffer마다 구분번호, 서버 ID, 출력 길이(총 길이), Event Type, CRC32 값 출력
-나오는 Buffer의 경우 현재 파악하지 못한 값 출력(파악된 값은 따로 변수에 저장)
-
-공통 양식인 Timestamp, Flag, Server ID, Length는 따로 변수에 저장하였고 POS의 경우 길이가 명확하지 않아 정의하지 않음
-(차후 테스트 후 정리할 예정)
-
-#### Example
-
-```
-List
-
-	mysql-bin.000007
-	mysql-bin.000008
-	mysql-bin.000009
-	mysql-bin.000010
-	mysql-bin.000011
-	mysql-bin.000012
-	mysql-bin.000013
-	mysql-bin.000014
-	mysql-bin.000015
-	mysql-bin.000016
-	mysql-bin.000017
-	mysql-bin.000018
-	mysql-bin.000019
-	mysql-bin.000020
-	mysql-bin.000021
-	mysql-bin.000022
-	mysql-bin.000023
-	mysql-bin.000024
-	mysql-bin.000025
-
-Enter the file name you want to read: mysql-bin.000025
-
-File name: mysql-bin.000025
-
-0001)	LEN: 105(122)	SERVER ID: 2	EVENT TYPE: FORMAT DESCRIPTION EVENT	CRC32: 332B964A
-7E 00 00 00 01 00 04 00 38 2E 30 2E 33 31 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 76 86 D0 63 13 00 
-0D 00 08 00 00 00 00 04 00 04 00 00 00 62 00 04 
-1A 08 00 00 00 08 08 08 02 00 00 00 0A 0A 0A 2A 
-2A 00 12 34 00 0A 28 00 01 
-
-0002)	LEN: 14(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	CRC32: 73B0C26A
-9D 00 00 00 80 00 00 00 00 00 00 00 00 00 
-
-0003)	LEN: 14(31)	SERVER ID: 2	EVENT TYPE: PREVIOUS GTIDS LOG EVENT	CRC32: 73B0C26A
-0E 00 00 00 00 00 00 00 5D 12 40 00 00 00 
-
-Process finished with exit code 0
-
-```
-
-## Ver `23.01.20
-
-### Input
-
-입력 없이 `BINLOG_FILE`에 해당 파일의 경로를 넣어 실행
-
-### Output
-
-파일명과 구분, 총 길이를 나타냄
-나오는 Buffer의 경우 현재 파악하지 못한 값을 출력함(파악된 값은 따로 변수에 저장)
-
-공통 양식인 Timestamp, Flag, Server ID, Length는 따로 변수에 저장하였고 POS의 경우 길이가 명확하지 않아 정의하지 않음
-(차후 테스트 후 정리할 예정)
-
-#### Example
-
-```
-File name: /var/lib/mysql/mysql-bin.000015
-
-0001) length: 122
-7E 00 00 00 00 00 04 00 38 2E 30 2E 33 31 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 00 00 67 87 BF 63 13 00 
-0D 00 08 00 00 00 00 04 00 04 00 00 00 62 00 04 
-1A 08 00 00 00 08 08 08 02 00 00 00 0A 0A 0A 2A 
-2A 00 12 34 00 0A 28 00 01 ED 7A 4A 01 
-
-0002) length: 31
-9D 00 00 00 80 00 00 00 00 00 00 00 00 00 93 C3 
-75 74 
-
-0003) length: 31
-10 FF 5D EA FE 7F 00 00 12 00 00 00 00 00 00 00 
-00 00 
-
-Process finished with exit code 0
-
-```
+#### 
