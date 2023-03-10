@@ -50,11 +50,28 @@ a planned piece of work that has a particular purpose
 
 > Winners never quit and quitters never win - VinceLombardi -
 
+## 법칙, 규칙, 원칙
+
+법칙: 반드시 지켜야만 하는 규범
+[수학] 연산의 규칙
+[철학] 모든 사물과 현상의 원인과 결과 사이에 내재하는 보편적, 필연적인 불변의 관계
+
+규칙: 여러 사람이 다 같이 지키기로 작정한 법칙 또는 제정된 질서
+[법률] 헌법이나 법률에 입각하여 정립되는 제정법의 한 형식. 입법, 사법, 행정의 각 부에서 제정되며 국회 인사 규칙, 감사원 사무 처리 규칙, 법원 사무 규칙 따위가 있다
+
+원칙: 어떤 행동이나 이론 따위에서 일관되게 지켜야 하는 기본적인 규칙이나 법칙
+[철학] 다른 여러 명제가 도출되는 기본 논제
+
 # 1. 개발환경 준비하기
 
 > [설치](https://developer.android.com)
 
+## 1. A 첫 번째 앱 만들기
 
+### 프로젝트 생성
+
+첫 화면에서 [New Project] > [Phone and Tablet] > [Empty Activity] 선택
+프로젝트 정보를 입력하는 화면에서 원하는 정보를 기입하고 Finish
 
 # 2. 안드로이드 앱의 기본 구조
 
