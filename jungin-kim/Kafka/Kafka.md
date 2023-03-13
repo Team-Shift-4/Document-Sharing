@@ -46,3 +46,5 @@ Schema Registry를 쓰다가 막히면 버전을 바꿔야 함
 -   AKHQ(8) -> Docker
 -   AWS Cloud Kafka
 -   Confluent Cloud Kafka
+
+https://docs.confluent.io/platform/current/platform-quickstart.html#quick-start-for-cp
