@@ -31,3 +31,18 @@ Tombstone
 SASL_SSL : GSSAPI, PLAIN
 
 Schema Registry를 쓰다가 막히면 버전을 바꿔야 함
+
+-   Apache Kafka
+-   Confluent Kafka
+    -   Basic -> Apache랑 큰 차이 없음
+    -   Zookeeper 없는 것
+    -   SASL
+        -   PLAIN
+        -   KBRS
+        -   SLARM(?)
+    -   SSL/TLS
+    -   Multi-Broker
+    -   Schema Registry(Apache가 안됨)
+-   AKHQ(8) -> Docker
+-   AWS Cloud Kafka
+-   Confluent Cloud Kafka

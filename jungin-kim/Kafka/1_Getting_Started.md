@@ -206,21 +206,106 @@ bin/kafka-server-start.sh config/server.properties
 
 모든 Service를 성공적으로 Startup시켰다면 Kafka 기본 환경과 사용 준비를 마친것입니다.
 
-## 
+## Step 3: Create a Topic to Store your Events
 
+Kafka는 여러 System에 걸쳐 Event(Record, Message는 같은 뜻입니다.)를 Read, Write, Store, Processing할 수 있는 Distributed Event Streaming Plaform입니다.
 
+Event는 Topic안에 구성되고 저장됩니다.
+간단히 말해 Topic은 File System의 Folder와 유사하며 Event는 Folder안에 들어있는 File이라고 보시면 편합니다.
 
--   Apache Kafka
--   Confluent Kafka
-    -   Basic -> Apache랑 큰 차이 없음
-    -   Zookeeper 없는 것
-    -   SASL
-        -   PLAIN
-        -   KBRS
-        -   SLARM(?)
-    -   SSL/TLS
-    -   Multi-Broker
-    -   Schema Registry(Apache가 안됨)
--   AKHQ(8) -> Docker
--   AWS Cloud Kafka
--   Confluent Cloud Kafka
+Event를 작성하기 위해서는 Topic을 먼저 만들어야 합니다.
+Terminal Session을 열어 다음을 실행해 Topic을 만듭니다.
+
+```bash
+bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092
+```
+
+Kafka의 모든 Command Line Tool은 별도의 Option을 가지고 있습니다.
+예로 인자 없이 `kafka-topics.sh`를 실행하면 사용 정보를 출력해줍니다.
+또한 새 Topic의 Partition Count같은 세부 정보도 확인할 수 있습니다.
+
+```bash
+bin/kafka-topics.sh --describe --topic quickstart-events --bootstrap-server localhost:9092
+```
+
+## Step 4: Write some Events into the Topic
+
+Kafka Client는 Event Read & Write를 위해 Network를 통해 Kafka Broker와 통신합니다.
+Broker는 일단 Event를 받으면 필요한 기간 동안 내구성 있고 내결함성 있는 방식으로 Event를 저장하며 영구적으로 저장하는 것도 가능합니다.
+
+Console Producer Client를 실행해 Topic에 몇 개의 Event를 작성해 볼 수 있습니다.
+기본적으로 Line을 입력할 때마다 Topic에 별도의 Event로 작성됩니다.
+
+```bash
+bin/kafka-console-producer.sh --topic quickstart-events --bootstrap-server localhost:9092
+first event
+second event
+```
+
+Producer Client는 `ctrl` + `c`로 중지할 수 있습니다.
+
+## Step 5: Read the Events
+
+Terminal Session을 하나 더 열어 Console Consumer Client를 실행해 Event를 읽을 수 있습니다.
+
+```bash
+bin/kafka-console-consumer.sh --topic quickstart-events --from-beginning --bootstarp-server localhost:9092
+first event
+second event
+```
+
+Consumer Client는 `ctrl` + `c`로 중지할 수 있습니다.
+
+Event는 Kafka에 지속적으로 저장되기에 필요한 만큼의 Consumer로 원하는 횟수만큼 읽을 수 있습니다.
+Terminal Session을 별도로 열어 이전 Command를 실행시키면 쉽게 확인할 수 있습니다.
+
+## Step 6: Import/Export your Data as Streams of Events with Kafka Connect
+
+RDB나 전통적인 Messaging System같은 기존 System에 Data가 많다면 이미 다수의 Application에서 이 System을 사용하고 있을 수 있습니다.
+Kafka Connect를 사용하면 되부 System Data를 Kafka로 끊임 없이 수집할 수 있으며 반대도 가능합니다.
+이 이유로 기존 System을 Kafka에 통합하기 쉽습니다.
+손쉽게 사용할 수 있는 Connector가 수백 개에 달하기에 통합 Process는 더 쉬워집니다.
+
+Kafka Connect Section에서 Data를 지속적으로 Kafka로 Import/Export하는 내용이 언급됩니다.
+
+## Step 7: Process your Events with Kafka Streams
+
+Data를 Kafka에 Event로 저장하고 나면 Java/Scala용 Kafka Streams Client Library를 사용해 Data를 처리할 수 있습니다.
+Input/Output Data를 Kafka Topic에 저장하는 Service 운영에 필수적인 Real-Time Application과 Micro Service를 구현할 수 있습니다.
+Kafka Streams는 Kafka의 Server Side Cluster 기술에 Standard Java/Scala Client Side Appliaction을 작성하고 배포하는 단순성을 더해 Streaming Appliaction의 확장성과 탄력성, 내결함성, 분상성을 높여줍니다.
+Kafka Streams Library는 Exactly-Once Processing, Stateful 연산 및 집계, Windowing, Join, Time-Based Event Processing 등을 지원합니다.
+
+Kafka Streams에서 많이 사용하는 `WordCount` Algorithm 구현 방법을 예시로 설명하겠습니다.
+
+```java
+KStream<String, String> textLines = builder.stream("quickstart-events");
+
+KTable<String, Long> wordCounts = textLines
+    .flatMapValues(line -> Arrays.asList(line.toLowerCase().split(" ")))
+    .groupBy((keyIgnored, word) -> word)
+    .count();
+
+wordCounts.toSream().to("output-topic"), Produced.with(Serdes.String(), Serdes.Long());
+```
+
+>   [Kafka Streams Demo](https://kafka.apache.org/25/documentation/streams/quickstart)
+>
+>   [Write a Kafka Streams Application Tutorial](https://kafka.apache.org/25/documentation/streams/tutorial)
+
+##  Step 8: Terminate the Kafka Environment
+
+1.   Producer와 Consumer Client를 중단하지 않았다면 `ctrl` + `c`로 중지합니다.
+2.   Kafka Broker를 `ctrl` + `c`로 중지합니다
+3.   Zookeeper를 마지막으로 `ctrl` + `c`로 중단합니다.
+
+앞서 생성한 Event 등의 Local Kafka 환경에 있는 모든 Data를 삭제하고 싶다면 아래 Command를 실행하면 됩니다.
+
+```bash
+rm -rf /tmp/kafka-logs /tmp/zookeeper
+```
+
+# Ecosystem
+
+Main 배포판 이외에도 Kafka를 통합할 수 있는 Tool은 무수히 많습니다.
+
+>   [Ecosystem](https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem)
